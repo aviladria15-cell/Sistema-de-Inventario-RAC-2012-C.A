@@ -22,9 +22,10 @@ import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import Modelo.cuenta;
-
+import Vista_Almacen.Vista_Salida_Unidad;
 
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.regex.Pattern;
@@ -460,78 +461,6 @@ private ArrayList<Inventario> ListaDeLotUnidad() throws ClassNotFoundException, 
 
  
     
-    private ArrayList<Inventario> ListaInventarioUNidadCom() throws ClassNotFoundException, SQLException {
-    ArrayList<Inventario> ListaInventarioo = new ArrayList<>();
-
-    try {
-        String Sql = "SELECT " +
-                     "i.id_inventario, " +
-                      "p.idProducto,"+
-                     "p.nombre AS nombreProducto, " +
-                     "i.Cantidad_Disponible, " +
-                     "i.precio_venta," +
-                     "i.stockMinimo, " +
-                     "i.stockMaximo, " +
-                     "CONCAT('Ala-', a.ala, ' -Pasillo ', a.pasillo, ' -Estante ', a.estante, ' -Nivel ', a.nivel) AS nombreUbicacion " +
-                     "FROM inventario i " +
-                     "INNER JOIN producto p ON p.idProducto = i.idProducto " +
-                     "LEFT JOIN almacen a ON a.id_Ubicacion = i.id_Ubicacion " +
-                     "WHERE i.tipo_producto = 'UNIDAD'";
-
-        this.conectar();
-        ps = this.con.prepareStatement(Sql);
-        rs = ps.executeQuery();
-
-        while (rs.next()) {
-            Inventario inve = new Inventario();
-
-            inve.setIdinventario(rs.getInt("id_inventario"));
-             inve.setIdProducto(rs.getInt("idProducto"));
-            inve.setProductos(rs.getString("nombreProducto"));
-            inve.setCantidad_Disponible(rs.getString("Cantidad_Disponible"));
-            inve.setPrecio_Venta(rs.getDouble("precio_venta"));
-            inve.setStockMinimo(rs.getInt("stockMinimo"));
-            inve.setStockMaximo(rs.getInt("stockMaximo"));
-            inve.setUbicacion(rs.getString("nombreUbicacion"));  // Ahora incluye Ala, Pasillo, Estante y Nivel
-
-            ListaInventarioo.add(inve);
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error al obtener la lista del inventario: " + e.getMessage());
-    } finally {
-        this.cerrarCn();
-    }
-
-    return ListaInventarioo;
-}
-
-    
-    
-    
-    
-  public void CargarComboxBoxUnidad() throws ClassNotFoundException, SQLException {
-    ArrayList<Inventario> listaProducto  = this.ListaInventarioUNidadCom();
-
-    // Limpiamos el ComboBox
-    Gestionar_Almacenn.JComboxSUnidad.removeAllItems();
-
-    // Agregamos los productos
-    for (Inventario inve : listaProducto) {
-        Gestionar_Almacenn.JComboxSUnidad.addItem(inve);
-    }
-
-    // 🔹 Aquí agregas el ActionListener una sola vez
-    Gestionar_Almacenn.JComboxSUnidad.addActionListener(e -> {
-        Inventario seleccionado = (Inventario) Gestionar_Almacenn.JComboxSUnidad.getSelectedItem();
-        if (seleccionado != null) {
-            Gestionar_Almacenn.txtPrecioVentaUnidad.setText(String.valueOf(seleccionado.getPrecio_Venta()));
-          
-        }
-    });
-}
-  
-
-    
 
  
 public void agregarFiltroBusquedaUnidad() {
@@ -820,6 +749,168 @@ public  void ActualizarLoteUNIDAD(int IdInventario) throws  ClassNotFoundExcepti
 
 
 
+
+    
+    private ArrayList<Inventario> ListaInventarioUNidadCom() throws ClassNotFoundException, SQLException {
+    ArrayList<Inventario> ListaInventarioo = new ArrayList<>();
+
+    try {
+        String Sql = "SELECT " +
+                     "i.id_inventario, " +
+                      "p.idProducto,"+
+                     "p.nombre AS nombreProducto, " +
+                     "i.Cantidad_Disponible, " +
+                     "i.precio_venta," +
+                     "i.stockMinimo, " +
+                     "i.stockMaximo, " +
+                     "CONCAT('Ala-', a.ala, ' -Pasillo ', a.pasillo, ' -Estante ', a.estante, ' -Nivel ', a.nivel) AS nombreUbicacion " +
+                     "FROM inventario i " +
+                     "INNER JOIN producto p ON p.idProducto = i.idProducto " +
+                     "LEFT JOIN almacen a ON a.id_Ubicacion = i.id_Ubicacion " +
+                     "WHERE i.tipo_producto = 'UNIDAD'";
+
+        this.conectar();
+        ps = this.con.prepareStatement(Sql);
+        rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Inventario inve = new Inventario();
+
+            inve.setIdinventario(rs.getInt("id_inventario"));
+             inve.setIdProducto(rs.getInt("idProducto"));
+            inve.setProductos(rs.getString("nombreProducto"));
+            inve.setCantidad_Disponible(rs.getString("Cantidad_Disponible"));
+            inve.setPrecio_Venta(rs.getDouble("precio_venta"));
+            inve.setStockMinimo(rs.getInt("stockMinimo"));
+            inve.setStockMaximo(rs.getInt("stockMaximo"));
+            inve.setUbicacion(rs.getString("nombreUbicacion"));  // Ahora incluye Ala, Pasillo, Estante y Nivel
+
+            ListaInventarioo.add(inve);
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al obtener la lista del inventario: " + e.getMessage());
+    } finally {
+        this.cerrarCn();
+    }
+
+    return ListaInventarioo;
+}
+
+    
+    /**
+ * Carga la información completa de un producto UNIDAD en el TextArea
+ */
+private void cargarInformacionCompletaProductoUnidad(int idInventario) throws SQLException, ClassNotFoundException {
+    
+    String sql = """
+        SELECT 
+            p.nombre,
+            p.numero_serial,
+            p.compatibilidad,
+            p.unidad_De_Medidad,
+            p.especificaciones,
+            m.nombre AS marca,
+            i.lote,
+            i.Fecha_Vencimiento,
+            i.Cantidad_Disponible,
+            a.pasillo,
+            a.ala,
+            a.estante,
+            a.nivel
+        FROM inventario i
+        JOIN producto p ON i.idProducto = p.idProducto
+        JOIN marca m ON p.idMarca = m.idMarca
+        LEFT JOIN almacen a ON i.id_Ubicacion = a.id_ubicacion
+        WHERE i.id_inventario = ?
+        """;
+
+    try {
+        this.conectar();
+        
+        try (PreparedStatement ps = this.con.prepareStatement(sql)) {
+            ps.setInt(1, idInventario);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    StringBuilder info = new StringBuilder();
+                    info.append("===   INFORMACIÓN COMPLETA  ===\n\n");
+                    
+                    info.append("Producto : ").append(rs.getString("nombre")).append("\n");
+                    info.append("Marca : ").append(rs.getString("marca")).append("\n");
+                    info.append("Número Serial  : ").append(rs.getString("numero_serial") != null ? rs.getString("numero_serial") : "N/A").append("\n");
+                    info.append("Compatibilidad : ").append(rs.getString("compatibilidad") != null ? rs.getString("compatibilidad") : "N/A").append("\n");
+                    info.append("Unidad Medida  : ").append(rs.getString("unidad_De_Medidad") != null ? rs.getString("unidad_De_Medidad") : "N/A").append("\n");
+                    info.append("Especificaciones: ").append(rs.getString("especificaciones") != null ? rs.getString("especificaciones") : "N/A").append("\n\n");
+                    
+                    info.append("=== INVENTARIO ===\n");
+                    info.append("Lote : ").append(rs.getString("lote") != null ? rs.getString("lote") : "N/A").append("\n\n");
+                  //  info.append("Fecha de Vencimiento: ").append(rs.getString("Fecha_Vencimiento") != null ? rs.getString("Fecha_Vencimiento") : "N/A").append("\n");
+                   // info.append("Cantidad Disponible : ").append(rs.getInt("Cantidad_Disponible")).append("\n\n");
+                    
+                    info.append("=== UBICACIÓN ===\n");
+                    if (rs.getString("pasillo") != null) {
+                        info.append("Pasillo : ").append(rs.getString("pasillo")).append("\n");
+                        info.append("Ala : ").append(rs.getString("ala")).append("\n");
+                        info.append("Estante : ").append(rs.getInt("estante")).append("\n");
+                        info.append("Nivel : ").append(rs.getInt("nivel")).append("\n");
+                    } else {
+                        info.append("Sin ubicación asignada\n");
+                    }
+
+                    Vista_Salida_Unidad.TxtInformacionProducto.setText(info.toString());
+                    
+                } else {
+                    Vista_Salida_Unidad.TxtInformacionProducto.setText("No se encontró información del producto.");
+                }
+            }
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al cargar información del producto Unidad:\n" + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } 
+}
+    
+  public void CargarComboxBoxUnidad() throws ClassNotFoundException, SQLException {
+    ArrayList<Inventario> listaProducto = this.ListaInventarioUNidadCom();
+    
+    // Limpiamos el ComboBox
+    Vista_Salida_Unidad.jComboBoxProductoUnida.removeAllItems();
+    
+    // Agregamos los productos
+    for (Inventario inve : listaProducto) {
+        Vista_Salida_Unidad.jComboBoxProductoUnida.addItem(inve);
+    }
+    
+    // Removemos ActionListeners anteriores para evitar duplicados
+    for (ActionListener al : Vista_Salida_Unidad.jComboBoxProductoUnida.getActionListeners()) {
+        Vista_Salida_Unidad.jComboBoxProductoUnida.removeActionListener(al);
+    }
+    
+    // Nuevo ActionListener
+    Vista_Salida_Unidad.jComboBoxProductoUnida.addActionListener(e -> {
+        Inventario seleccionado = (Inventario) Vista_Salida_Unidad.jComboBoxProductoUnida.getSelectedItem();
+        
+        if (seleccionado != null) {
+            try {
+                // Actualizar precio de venta
+                Vista_Salida_Unidad.txtPrecioVentaUnitario.setText(
+                    String.valueOf(seleccionado.getPrecio_Venta())
+                );
+                
+                // Cargar información completa del producto Unidad
+                cargarInformacionCompletaProductoUnidad(seleccionado.getIdinventario());
+                
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null,
+                    "Error al cargar información del producto:\n" + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
+    });
+}
 
 
 

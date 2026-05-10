@@ -1,21 +1,23 @@
 package Reportes;
 
-import Vista_Almacen.Vista_Salida_Liquido;
 import Modelo.Inventario;
+import Vista_Almacen.Vista_Salida_Liquido;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import java.awt.Color;
-
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Generador de Reportes Estilo SAP Business One
@@ -27,6 +29,18 @@ public class Ordenes_de_Salidad {
     private final Color SAP_BLUE = new Color(0, 93, 169);
     private final Color LIGHT_GRAY = new Color(240, 240, 240);
     private final Color TEXT_DARK = new Color(40, 40, 40);
+
+    // Formato venezolano: 19.376,37
+    private final DecimalFormat dfBolivares = createBolivaresFormat();
+
+    private DecimalFormat createBolivaresFormat() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMANY);
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df;
+    }
 
     public void generarPDFOrdenSalida(int cantidad, BigDecimal precioUnitario,
                                       BigDecimal tasaDolar, String detalle) {
@@ -41,23 +55,22 @@ public class Ordenes_de_Salidad {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
-            
+
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 float margin = 50;
                 float width = page.getMediaBox().getWidth() - (2 * margin);
                 float y = 780;
 
                 // ====================== ENCABEZADO SAP STYLE ======================
-                // Rectángulo superior decorativo
                 contentStream.setNonStrokingColor(SAP_BLUE);
                 contentStream.addRect(margin, y - 5, width, 3);
                 contentStream.fill();
-
                 y -= 30;
+
                 contentStream.setNonStrokingColor(SAP_BLUE);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 24);
                 drawText(contentStream, margin, y, "Orden de Salida de Inventario");
-                
+
                 contentStream.setNonStrokingColor(TEXT_DARK);
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
                 drawText(contentStream, margin, y - 15, "RAC 2012 C.A. - Gestión de Almacén");
@@ -67,7 +80,7 @@ public class Ordenes_de_Salidad {
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
                 drawText(contentStream, rightInfoX, y, "N° Documento:");
                 drawText(contentStream, rightInfoX, y - 15, "Fecha Emisión:");
-                
+
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
                 drawText(contentStream, rightInfoX + 80, y, "OS-" + System.currentTimeMillis() / 100000);
                 drawText(contentStream, rightInfoX + 80, y - 15, LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
@@ -76,12 +89,11 @@ public class Ordenes_de_Salidad {
 
                 // ====================== SECCIÓN: DATOS DEL PRODUCTO ======================
                 y = drawSectionHeader(contentStream, margin, y, width, "INFORMACIÓN DEL ARTÍCULO");
-                
+
                 float col1 = margin + 10;
                 float col2 = margin + 150;
                 float rowH = 15;
 
-                contentStream.setFont(PDType1Font.HELVETICA_BOLD, 10);
                 String[][] productData = {
                     {"Descripción:", seleccionado.getProductos()},
                     {"Marca:", getMarca()},
@@ -97,36 +109,34 @@ public class Ordenes_de_Salidad {
                     drawText(contentStream, col2, y, row[1]);
                     y -= rowH;
                 }
-
                 y -= 20;
 
                 // ====================== SECCIÓN: LOGÍSTICA ======================
                 y = drawSectionHeader(contentStream, margin, y, width, "LOGÍSTICA Y UBICACIÓN");
-                
+
                 drawText(contentStream, col1, y, "Ubicación en Almacén:");
                 contentStream.setFont(PDType1Font.HELVETICA, 10);
-                String ubicacion = String.format("Pasillo: %s | Ala: %s | Estante: %s | Nivel: %s", 
+                String ubicacion = String.format("Pasillo: %s | Ala: %s | Estante: %s | Nivel: %s",
                         getCampo("Pasillo"), getCampo("Ala"), getCampo("Estante"), getCampo("Nivel"));
                 drawText(contentStream, col2, y, ubicacion);
-                
+
                 y -= 30;
 
-                // ====================== TABLA DE COSTOS (RESUMEN FINANCIERO) ======================
+                // ====================== TABLA DE COSTOS ======================
                 y = drawSectionHeader(contentStream, margin, y, width, "RESUMEN DE SALIDA");
-                
-                // Encabezados de tabla
+
                 contentStream.setNonStrokingColor(LIGHT_GRAY);
                 contentStream.addRect(margin, y - 5, width, 15);
                 contentStream.fill();
-                
+
                 contentStream.setNonStrokingColor(TEXT_DARK);
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 9);
                 drawText(contentStream, margin + 5, y, "CANTIDAD");
                 drawText(contentStream, margin + 80, y, "DESCRIPCIÓN");
                 drawText(contentStream, margin + 280, y, "PRECIO UNIT. (USD)");
                 drawText(contentStream, margin + 400, y, "TOTAL (USD)");
-
                 y -= 20;
+
                 BigDecimal totalDolares = precioUnitario.multiply(new BigDecimal(cantidad));
                 BigDecimal totalBolivares = totalDolares.multiply(tasaDolar);
 
@@ -138,7 +148,7 @@ public class Ordenes_de_Salidad {
 
                 y -= 40;
 
-                // Bloque de Totales Estilo SAP (Caja a la derecha)
+                // Bloque de Totales Estilo SAP
                 float totalBoxX = 350;
                 contentStream.setNonStrokingColor(LIGHT_GRAY);
                 contentStream.addRect(totalBoxX, y - 40, 195, 55);
@@ -146,33 +156,31 @@ public class Ordenes_de_Salidad {
 
                 contentStream.setNonStrokingColor(TEXT_DARK);
                 drawText(contentStream, totalBoxX + 10, y, "Tasa BCV:");
-                drawText(contentStream, totalBoxX + 110, y, "Bs. " + tasaDolar);
-                
+                drawText(contentStream, totalBoxX + 110, y, "Bs. " + tasaDolar.setScale(2, RoundingMode.HALF_UP));
+
                 y -= 15;
                 drawText(contentStream, totalBoxX + 10, y, "Total USD:");
                 drawText(contentStream, totalBoxX + 110, y, "$ " + totalDolares.setScale(2, RoundingMode.HALF_UP));
-                
+
                 y -= 15;
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
                 contentStream.setNonStrokingColor(SAP_BLUE);
                 drawText(contentStream, totalBoxX + 10, y, "TOTAL BS:");
-                drawText(contentStream, totalBoxX + 110, y, "Bs. " + totalBolivares.setScale(2, RoundingMode.HALF_UP));
-
+                drawText(contentStream, totalBoxX + 110, y, "Bs. " + dfBolivares.format(totalBolivares));
+                
                 // Pie de página
                 y = 100;
                 contentStream.setNonStrokingColor(Color.GRAY);
                 contentStream.setFont(PDType1Font.HELVETICA_OBLIQUE, 8);
                 drawText(contentStream, margin, y, "Motivo de salida: " + (detalle.isEmpty() ? "Despacho de inventario estándar" : detalle));
-                
+
                 drawLine(contentStream, margin, 70, margin + 150, 70);
                 drawText(contentStream, margin + 35, 60, "Firma Almacén");
-                
+
                 drawLine(contentStream, width - 100, 70, width + margin, 70);
                 drawText(contentStream, width - 80, 60, "Firma Receptor");
-
             }
 
-            // Manejo de guardado (igual que tu código original)
             guardarArchivo(document);
 
         } catch (Exception e) {
@@ -181,20 +189,21 @@ public class Ordenes_de_Salidad {
         }
     }
 
-    // Método para dibujar encabezados de sección sombreados
+    // ====================== MÉTODOS AUXILIARES ======================
+
     private float drawSectionHeader(PDPageContentStream cs, float x, float y, float w, String title) throws IOException {
         cs.setNonStrokingColor(SAP_BLUE);
         cs.addRect(x, y - 5, w, 15);
         cs.fill();
-        
+
         cs.setNonStrokingColor(Color.WHITE);
         cs.setFont(PDType1Font.HELVETICA_BOLD, 10);
         cs.beginText();
         cs.newLineAtOffset(x + 5, y - 1);
         cs.showText(title);
         cs.endText();
-        
-        cs.setNonStrokingColor(TEXT_DARK); // Reset color
+
+        cs.setNonStrokingColor(TEXT_DARK);
         return y - 25;
     }
 
@@ -226,10 +235,14 @@ public class Ordenes_de_Salidad {
         String texto = Vista_Salida_Liquido.TextAreaInformacionProducto.getText();
         if (texto == null || texto.isEmpty()) return "N/A";
         for (String linea : texto.split("\n")) {
-            if (linea.contains(campo + ":")) return linea.substring(linea.indexOf(":") + 1).trim();
+            if (linea.contains(campo + ":")) {
+                return linea.substring(linea.indexOf(":") + 1).trim();
+            }
         }
         return "N/A";
     }
 
-    private String getMarca() { return getCampo("Marca"); }
+    private String getMarca() {
+        return getCampo("Marca");
+    }
 }

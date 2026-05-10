@@ -95,6 +95,7 @@ public class Menu_Sistema extends javax.swing.JFrame {
         jMenuAjusteUnidad = new javax.swing.JMenuItem();
         jMenuItemLiquidoSalida = new javax.swing.JMenuItem();
         jMenuISALIDA_SOLIDO = new javax.swing.JMenuItem();
+        jMenuItemUnidaSalida = new javax.swing.JMenuItem();
         jMenu_Inventario = new javax.swing.JMenu();
         jMenuInventarioLiquido = new javax.swing.JMenuItem();
         jMenuItemInventarioSolido = new javax.swing.JMenuItem();
@@ -296,6 +297,11 @@ public class Menu_Sistema extends javax.swing.JFrame {
         jMenuISALIDA_SOLIDO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/SalidaSolido 32.png"))); // NOI18N
         jMenuISALIDA_SOLIDO.setText("Sólido Salida");
         JMenu_Iniciar_Almacen.add(jMenuISALIDA_SOLIDO);
+
+        jMenuItemUnidaSalida.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        jMenuItemUnidaSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/InventarioUnidad 32.png"))); // NOI18N
+        jMenuItemUnidaSalida.setText("Unidad Salida");
+        JMenu_Iniciar_Almacen.add(jMenuItemUnidaSalida);
 
         JMenu.add(JMenu_Iniciar_Almacen);
 
@@ -554,6 +560,7 @@ Funciones.ReporteMargenGanancia.mostrar();
     public static javax.swing.JMenuItem jMenuInventarioLiquido;
     public static javax.swing.JMenuItem jMenuItemInventarioSolido;
     public static javax.swing.JMenuItem jMenuItemLiquidoSalida;
+    public static javax.swing.JMenuItem jMenuItemUnidaSalida;
     public static javax.swing.JMenuItem jMenuIuSUARIOS;
     public static javax.swing.JMenu jMenuLibroContable;
     public static javax.swing.JMenuItem jMenuLibroDIARIO;

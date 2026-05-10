@@ -115,6 +115,8 @@ reportes.generarPDFOrdenSalida(
             System.getLogger(Controlador_Liquido_Salida.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         // Dentro del ActionListener del botón Realizar Movimiento
+cargarCuentas();
+CargaComb();
 
     }
     
@@ -133,6 +135,18 @@ reportes.generarPDFOrdenSalida(
         }
    }
    
+   
+   private  void CargaComb (){
+       
+       ModeloDAO.InventarioLiquidoDao inventarioLiquidoDao = new InventarioLiquidoDao();
+        try {
+            inventarioLiquidoDao. CargarComboxBoxLiquido();
+        } catch (ClassNotFoundException ex) {
+            System.getLogger(Controlador_Liquido_Salida.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (SQLException ex) {
+            System.getLogger(Controlador_Liquido_Salida.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+   }
    
    private  void LimpiarVista (){
        Liquido_Salida.txtPrecioVenta.setText("");

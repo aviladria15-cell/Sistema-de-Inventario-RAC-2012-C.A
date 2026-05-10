@@ -61,6 +61,7 @@ public class ControladorAction implements ActionListener {
    private Controlador_Liquido_Salida controlador_Liquido_Salida;
    private Controlador_Inventario_Unidad controlador_Inventario_Unidad;
    private  Controlador_Salida_Solido controlador_Salida_Solido;
+   private  Controlador_Salida_Unidad controlador_Salida_Unidad;
    // esta variable se ultiliza en este caso para mostrar mostrar la contraseña si el usuario lo desea
    private char echoCharOriginal;
    
@@ -149,6 +150,7 @@ public class ControladorAction implements ActionListener {
                    // Almecen
                    this.menu.jMenuItemLiquidoSalida.addActionListener(this);
                    this.menu.jMenuISALIDA_SOLIDO.addActionListener(this);
+                   this.menu.jMenuItemUnidaSalida.addActionListener(this);
                    
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -203,6 +205,15 @@ public class ControladorAction implements ActionListener {
         }
         
         
+        else if (e.getSource() == menu.jMenuItemUnidaSalida) {
+            if (controlador_Salida_Unidad == null) {
+                
+                controlador_Salida_Unidad = new Controlador_Salida_Unidad(menu);
+            }
+            
+            
+            controlador_Salida_Unidad.MostrarVistaSalidaUnidad();
+        }
         
         
         

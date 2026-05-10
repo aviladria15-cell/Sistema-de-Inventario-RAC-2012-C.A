@@ -22,6 +22,7 @@ import  Vista_GestionInventario.InventarioLiquido;
 import Vista_GestionInventario.InventarioSolido;
 import Vista_Almacen.Vista_Salida_Liquido;
 import Vista_Almacen.Vista_Salida_Solido;
+import Vista_Almacen.Vista_Salida_Unidad;
 public class MovientosDao extends ConexiónBD {
 
     PreparedStatement ps;
@@ -688,34 +689,34 @@ int IDCuentaIngreso = SeleccionCuentaIngreso.getIdCuenta();
     
     public  void Realizar_SALIDA_Unidad() throws  ClassNotFoundException,SQLException {
         
-        mv.setTipoProducto(Gestionar_Almacenn.txtTIPOUNIDAD.getText());
+        mv.setTipoProducto(Vista_Salida_Unidad.txtTipoProductoUnidad.getText());
         
-        mv.setTipoMovimiento(Gestionar_Almacenn.txtSALIDA.getText());
+        mv.setTipoMovimiento(Vista_Salida_Unidad.txtAccionSalida.getText());
         
-        mv.setCantidad(Integer.parseInt(Gestionar_Almacenn.txtCantidadUnidad.getText()));
+        mv.setCantidad(Integer.parseInt(Vista_Salida_Unidad.txtCantidadUnida.getText()));
         
-        mv.setPrecio_Venta(Double.parseDouble((Gestionar_Almacenn.txtPrecioVentaUnidad.getText())));
+        mv.setPrecio_Venta(Double.parseDouble((Vista_Salida_Unidad.txtPrecioVentaUnitario.getText())));
         
         
-        mv.setDetalle(Gestionar_Almacenn.txtDatelleUnidad.getText());
+        mv.setDetalle(Vista_Salida_Unidad.txtDetalle.getText());
    
         
         Inventario productoSeleccionado = 
-       (Inventario) Gestionar_Almacenn.JComboxSUnidad.getSelectedItem();
+       (Inventario) Vista_Salida_Unidad.jComboBoxProductoUnida.getSelectedItem();
 
 int idProducto = productoSeleccionado.getIdProducto(); // 👈 Este es el que necesitas
 
-       cuenta SeleccionCuenta = (cuenta) Gestionar_Almacenn.jComboBoxCuentas.getSelectedItem();
+       cuenta SeleccionCuenta = (cuenta) Vista_Salida_Unidad.jComboBoxCuenta.getSelectedItem();
        int idCuenta = SeleccionCuenta.getIdCuenta();
         
         Inventario productoSeleccionado0 = 
-       (Inventario) Gestionar_Almacenn.JComboxSUnidad.getSelectedItem();
+       (Inventario) Vista_Salida_Unidad.jComboBoxProductoUnida.getSelectedItem();
         
      
 int idProduct = productoSeleccionado0.getIdinventario();
 
 
-cuenta SeleccionCuentaIngreso = (cuenta) Gestionar_Almacenn.jComboBoxCuentasIngreso.getSelectedItem();
+cuenta SeleccionCuentaIngreso = (cuenta) Vista_Salida_Unidad.jComboBoxIngreson.getSelectedItem();
 
 int idCuentaIngreso = SeleccionCuentaIngreso.getIdCuenta();
 
@@ -739,15 +740,14 @@ int idCuentaIngreso = SeleccionCuentaIngreso.getIdCuenta();
             if (ps.executeUpdate() > 0) {
                 
                 JOptionPane.showMessageDialog(null, "Movimiento realizado"); 
-                iv.CargarComboxBoxUnidad();
+               
                 
-                Gestionar_Almacenn.txtCantidadUnidad.setText("");
-                Gestionar_Almacenn.txtPrecioVentaUnidad.setText("");
-                Gestionar_Almacenn.txtDatelleUnidad.setText("");
+             Vista_Salida_Unidad.txtCantidadUnida.setText("");
+                Vista_Salida_Unidad.txtPrecioVentaUnitario.setText("");
+                Vista_Salida_Unidad.txtDetalle.setText("");
                 
                 
-            } else {
-                JOptionPane.showInternalMessageDialog(null, "   Diablo");
+                
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error " + e.getMessage());

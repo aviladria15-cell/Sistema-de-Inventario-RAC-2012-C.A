@@ -105,7 +105,7 @@ public class Vista_Salida_Liquido extends javax.swing.JFrame {
         txtTipoProducto.setBackground(new java.awt.Color(255, 255, 0));
         txtTipoProducto.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         txtTipoProducto.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtTipoProducto.setText("Liquido");
+        txtTipoProducto.setText("LIQUIDO");
         jPanel1.add(txtTipoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 100, -1));
 
         jLabel4.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
@@ -205,7 +205,7 @@ public class Vista_Salida_Liquido extends javax.swing.JFrame {
         jLabel13.setText("Cuenta Pasivo:");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 470, -1, -1));
 
-        jComboBoxCuentaPasivo.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        jComboBoxCuentaPasivo.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         jPanel1.add(jComboBoxCuentaPasivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 470, 300, -1));
 
         jLabel14.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
@@ -214,7 +214,7 @@ public class Vista_Salida_Liquido extends javax.swing.JFrame {
         jLabel14.setToolTipText("");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 530, -1, -1));
 
-        jComboBoxCuentaIngreso.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        jComboBoxCuentaIngreso.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         jPanel1.add(jComboBoxCuentaIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 530, 290, -1));
 
         btbVolverAlMenu.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N

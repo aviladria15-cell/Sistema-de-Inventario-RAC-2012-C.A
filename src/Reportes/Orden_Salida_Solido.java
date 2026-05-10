@@ -13,8 +13,11 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Generador de Reportes Estilo SAP Business One - Productos Sólidos
@@ -22,10 +25,22 @@ import java.time.format.DateTimeFormatter;
  */
 public class Orden_Salida_Solido {
 
-    // Colores SAP Style (igual que en la clase de líquidos)
+    // Colores SAP Style
     private final Color SAP_BLUE = new Color(0, 93, 169);
     private final Color LIGHT_GRAY = new Color(240, 240, 240);
     private final Color TEXT_DARK = new Color(40, 40, 40);
+
+    // Formato venezolano: 19.376,37
+    private final DecimalFormat dfBolivares = createBolivaresFormat();
+
+    private DecimalFormat createBolivaresFormat() {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.GERMANY);
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+        DecimalFormat df = new DecimalFormat("#,##0.00", symbols);
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df;
+    }
 
     public void generarPDFOrdenSalidaSolido(int cantidad, BigDecimal precioUnitario,
                                             BigDecimal tasaDolar, String detalle) {
@@ -111,7 +126,6 @@ public class Orden_Salida_Solido {
                 // ====================== RESUMEN DE SALIDA ======================
                 y = drawSectionHeader(contentStream, margin, y, width, "RESUMEN DE SALIDA");
 
-                // Encabezados de tabla
                 contentStream.setNonStrokingColor(LIGHT_GRAY);
                 contentStream.addRect(margin, y - 5, width, 15);
                 contentStream.fill();
@@ -143,7 +157,7 @@ public class Orden_Salida_Solido {
 
                 contentStream.setNonStrokingColor(TEXT_DARK);
                 drawText(contentStream, totalBoxX + 10, y, "Tasa BCV:");
-                drawText(contentStream, totalBoxX + 110, y, "Bs. " + tasaDolar);
+                drawText(contentStream, totalBoxX + 110, y, "Bs. " + tasaDolar.setScale(2, RoundingMode.HALF_UP));
 
                 y -= 15;
                 drawText(contentStream, totalBoxX + 10, y, "Total USD:");
@@ -153,7 +167,7 @@ public class Orden_Salida_Solido {
                 contentStream.setFont(PDType1Font.HELVETICA_BOLD, 11);
                 contentStream.setNonStrokingColor(SAP_BLUE);
                 drawText(contentStream, totalBoxX + 10, y, "TOTAL BS:");
-                drawText(contentStream, totalBoxX + 110, y, "Bs. " + totalBolivares.setScale(2, RoundingMode.HALF_UP));
+                drawText(contentStream, totalBoxX + 110, y, "Bs. " + dfBolivares.format(totalBolivares));
 
                 // ====================== PIE DE PÁGINA ======================
                 y = 100;
@@ -218,13 +232,9 @@ public class Orden_Salida_Solido {
         }
     }
 
-    /** 
-     * Método adaptado al formato exacto de txtInformacionProducto 
-     */
     private String getCampo(String campo) {
         String texto = Vista_Salida_Solido.txtInformacionProducto.getText();
         if (texto == null || texto.isEmpty()) return "N/A";
-
         for (String linea : texto.split("\n")) {
             if (linea.contains(campo + " :") || linea.contains(campo + ":")) {
                 int index = linea.indexOf(":");

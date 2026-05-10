@@ -106,7 +106,7 @@ public class Vista_Salida_Solido extends javax.swing.JFrame {
         txtProductoSolido.setBackground(new java.awt.Color(255, 102, 102));
         txtProductoSolido.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         txtProductoSolido.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtProductoSolido.setText("Solido");
+        txtProductoSolido.setText("SOLIDO");
         jPanel1.add(txtProductoSolido, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 70, 120, -1));
 
         jLabel5.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
@@ -191,16 +191,17 @@ public class Vista_Salida_Solido extends javax.swing.JFrame {
         jLabel12.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
         jLabel12.setText("Tasa del Dolar BCV:");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 30, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 50, -1, -1));
 
         txtTasaBCV.setEditable(false);
         txtTasaBCV.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         txtTasaBCV.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel1.add(txtTasaBCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 30, 120, -1));
+        jPanel1.add(txtTasaBCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 50, 120, -1));
 
         jLabel13.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(255, 255, 255));
         jLabel13.setText("Información Completa del Producto");
+        jLabel13.setToolTipText("");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 140, -1, -1));
 
         txtInformacionProducto.setEditable(false);
@@ -216,7 +217,7 @@ public class Vista_Salida_Solido extends javax.swing.JFrame {
         jLabel15.setText("Cuenta Pasivo:");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 510, -1, -1));
 
-        jComboBoxCuantaPasivo.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        jComboBoxCuantaPasivo.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         jPanel1.add(jComboBoxCuantaPasivo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 510, 300, -1));
 
         jLabel14.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
@@ -224,7 +225,7 @@ public class Vista_Salida_Solido extends javax.swing.JFrame {
         jLabel14.setText("Cuenta Ingreso:");
         jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 580, -1, -1));
 
-        jComboBoxIngreso.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
+        jComboBoxIngreso.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
         jPanel1.add(jComboBoxIngreso, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 580, 290, -1));
 
         FondoPantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/fondoMordeno.jpg"))); // NOI18N
