@@ -15,27 +15,19 @@ import java.util.ArrayList;
 import Modelo.Almacen;
 import Modelo.Proveedor;
 import Modelo.Usuario;
-
-import Vista_Almacen.Gestionar_Almacenn;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import Modelo.cuenta;
 import Vista_Almacen.Vista_Salida_Unidad;
-
-import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableRowSorter;
+import  Vista_Almacen.Ajuste_Unidad;
 
 /**
  *
@@ -913,6 +905,123 @@ private void cargarInformacionCompletaProductoUnidad(int idInventario) throws SQ
 }
 
 
+
+  
+  
+  
+  
+  
+  private void cargarInformacionCompletaProductoUnidadAjuste(int idInventario) throws SQLException, ClassNotFoundException {
+    
+    String sql = """
+        SELECT 
+            p.nombre,
+            p.numero_serial,
+            p.compatibilidad,
+            p.unidad_De_Medidad,
+            p.especificaciones,
+            m.nombre AS marca,
+            i.lote,
+            i.Fecha_Vencimiento,
+            i.Cantidad_Disponible,
+            a.pasillo,
+            a.ala,
+            a.estante,
+            a.nivel
+        FROM inventario i
+        JOIN producto p ON i.idProducto = p.idProducto
+        JOIN marca m ON p.idMarca = m.idMarca
+        LEFT JOIN almacen a ON i.id_Ubicacion = a.id_ubicacion
+        WHERE i.id_inventario = ?
+        """;
+
+    try {
+        this.conectar();
+        
+        try (PreparedStatement ps = this.con.prepareStatement(sql)) {
+            ps.setInt(1, idInventario);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    StringBuilder info = new StringBuilder();
+                    info.append("===   INFORMACIÓN COMPLETA  ===\n\n");
+                    
+                    info.append("Producto : ").append(rs.getString("nombre")).append("\n");
+                    info.append("Marca : ").append(rs.getString("marca")).append("\n");
+                    info.append("Número Serial  : ").append(rs.getString("numero_serial") != null ? rs.getString("numero_serial") : "N/A").append("\n");
+                    info.append("Compatibilidad : ").append(rs.getString("compatibilidad") != null ? rs.getString("compatibilidad") : "N/A").append("\n");
+                    info.append("Unidad Medida  : ").append(rs.getString("unidad_De_Medidad") != null ? rs.getString("unidad_De_Medidad") : "N/A").append("\n");
+                    info.append("Especificaciones: ").append(rs.getString("especificaciones") != null ? rs.getString("especificaciones") : "N/A").append("\n\n");
+                    
+                    info.append("=== INVENTARIO ===\n");
+                    info.append("Lote : ").append(rs.getString("lote") != null ? rs.getString("lote") : "N/A").append("\n\n");
+                  //  info.append("Fecha de Vencimiento: ").append(rs.getString("Fecha_Vencimiento") != null ? rs.getString("Fecha_Vencimiento") : "N/A").append("\n");
+                   // info.append("Cantidad Disponible : ").append(rs.getInt("Cantidad_Disponible")).append("\n\n");
+                    
+                    info.append("=== UBICACIÓN ===\n");
+                    if (rs.getString("pasillo") != null) {
+                        info.append("Pasillo : ").append(rs.getString("pasillo")).append("\n");
+                        info.append("Ala : ").append(rs.getString("ala")).append("\n");
+                        info.append("Estante : ").append(rs.getInt("estante")).append("\n");
+                        info.append("Nivel : ").append(rs.getInt("nivel")).append("\n");
+                    } else {
+                        info.append("Sin ubicación asignada\n");
+                    }
+
+                   Ajuste_Unidad.jTextAreaInformacionProducto.setText(info.toString());
+                    
+                } else {
+                      Ajuste_Unidad.jTextAreaInformacionProducto.setText("No se encontró información del producto.");
+                }
+            }
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al cargar información del producto Unidad:\n" + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } 
+}
+    
+  public void CargarComboxBoxUnidadaJUSTE() throws ClassNotFoundException, SQLException {
+    ArrayList<Inventario> listaProducto = this.ListaInventarioUNidadCom();
+    
+    // Limpiamos el ComboBox
+    Ajuste_Unidad.jComboBoxProductoUnidad.removeAllItems();
+    
+    // Agregamos los productos
+    for (Inventario inve : listaProducto) {
+         Ajuste_Unidad.jComboBoxProductoUnidad.addItem(inve);
+    }
+    
+    // Removemos ActionListeners anteriores para evitar duplicados
+    for (ActionListener al :   Ajuste_Unidad.jComboBoxProductoUnidad.getActionListeners()) {
+          Ajuste_Unidad.jComboBoxProductoUnidad.removeActionListener(al);
+    }
+    
+    // Nuevo ActionListener
+    Ajuste_Unidad.jComboBoxProductoUnidad.addActionListener(e -> {
+        Inventario seleccionado = (Inventario)   Ajuste_Unidad.jComboBoxProductoUnidad.getSelectedItem();
+        
+        if (seleccionado != null) {
+            try {
+            /*    // Actualizar precio de venta
+                Vista_Salida_Unidad.txtPrecioVentaUnitario.setText(
+                    String.valueOf(seleccionado.getPrecio_Venta())
+                );
+                */
+                // Cargar información completa del producto Unidad
+                cargarInformacionCompletaProductoUnidadAjuste(seleccionado.getIdinventario());
+                
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null,
+                    "Error al cargar información del producto:\n" + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
+    });
+}
 
     
     

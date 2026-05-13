@@ -19,12 +19,12 @@ public class Frm_Cuenta extends javax.swing.JFrame {
     /**
      * Creates new form LibroContable
      */
-    public Frm_Cuenta() throws ClassNotFoundException, SQLException {
+    public Frm_Cuenta()  {
         initComponents();
         setTitle("Cuentas Contables");
          setLocationRelativeTo(null);
          setExtendedState(Frm_Cuenta.MAXIMIZED_BOTH);
-         Cuenta.MostrarListaDeCuenta();
+         //Cuenta.MostrarListaDeCuenta();
          
      
     }
@@ -41,7 +41,7 @@ public class Frm_Cuenta extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btbVolverMenu = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaCuentas = new javax.swing.JTable();
         FondoCompleto = new javax.swing.JLabel();
@@ -62,15 +62,16 @@ public class Frm_Cuenta extends javax.swing.JFrame {
         jLabel2.setText("Cuenta Contable");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, -1, -1));
 
-        jButton1.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Atras.png"))); // NOI18N
-        jButton1.setText("Atrás");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btbVolverMenu.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        btbVolverMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Atras.png"))); // NOI18N
+        btbVolverMenu.setText("Volver");
+        btbVolverMenu.setToolTipText("");
+        btbVolverMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btbVolverMenuActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 660, 140, 40));
+        jPanel1.add(btbVolverMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 660, 140, 40));
 
         TablaCuentas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -87,7 +88,7 @@ public class Frm_Cuenta extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 130, 1160, 430));
 
-        FondoCompleto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/FondoCompleto.png"))); // NOI18N
+        FondoCompleto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/fondoMordeno.jpg"))); // NOI18N
         jPanel1.add(FondoCompleto, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, -4, 1380, 750));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1380, 742));
@@ -95,13 +96,10 @@ public class Frm_Cuenta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        new vista_Libro_Contable.Opciones().setVisible(true);
-        this.dispose();
+    private void btbVolverMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbVolverMenuActionPerformed
 
 // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btbVolverMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,7 +109,7 @@ public class Frm_Cuenta extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel FondoCompleto;
     public static javax.swing.JTable TablaCuentas;
-    private javax.swing.JButton jButton1;
+    public static javax.swing.JButton btbVolverMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

@@ -86,16 +86,13 @@ public class Menu_Sistema extends javax.swing.JFrame {
         Menu_cotizacion = new javax.swing.JMenuItem();
         Jmenu_abrir_Proveedor = new javax.swing.JMenuItem();
         JMenu_Iniciar_Almacen = new javax.swing.JMenu();
-        jMenuSALIDAlIQUIDO = new javax.swing.JMenuItem();
-        jMenuISalidaSolido = new javax.swing.JMenuItem();
-        JmenuUnidad = new javax.swing.JMenuItem();
         jMenuAbrirAlmacen = new javax.swing.JMenuItem();
-        JmenuAjusteLiquido = new javax.swing.JMenuItem();
-        JmenuAjsuteSolido = new javax.swing.JMenuItem();
-        jMenuAjusteUnidad = new javax.swing.JMenuItem();
         jMenuItemLiquidoSalida = new javax.swing.JMenuItem();
         jMenuISALIDA_SOLIDO = new javax.swing.JMenuItem();
         jMenuItemUnidaSalida = new javax.swing.JMenuItem();
+        jMenuItemAjusteLiquiod = new javax.swing.JMenuItem();
+        jMenuItemAjusteSolido = new javax.swing.JMenuItem();
+        jMenuItemAjusteUnidad = new javax.swing.JMenuItem();
         jMenu_Inventario = new javax.swing.JMenu();
         jMenuInventarioLiquido = new javax.swing.JMenuItem();
         jMenuItemInventarioSolido = new javax.swing.JMenuItem();
@@ -103,6 +100,7 @@ public class Menu_Sistema extends javax.swing.JFrame {
         jMenuLibroContable = new javax.swing.JMenu();
         JmenuLibroMayor = new javax.swing.JMenuItem();
         jMenuLibroDIARIO = new javax.swing.JMenuItem();
+        jMenuItemCuentasContables = new javax.swing.JMenuItem();
         Menu_Reportes_Sistema = new javax.swing.JMenu();
         Menu_Salidas_Inventario_Reporte = new javax.swing.JMenuItem();
         Menu_Reporte_Proveedores = new javax.swing.JMenuItem();
@@ -253,55 +251,50 @@ public class Menu_Sistema extends javax.swing.JFrame {
         JMenu_Iniciar_Almacen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Almacen 32.png"))); // NOI18N
         JMenu_Iniciar_Almacen.setText("Almacén");
 
-        jMenuSALIDAlIQUIDO.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        jMenuSALIDAlIQUIDO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-verde.png"))); // NOI18N
-        jMenuSALIDAlIQUIDO.setText("Salida Liquido");
-        JMenu_Iniciar_Almacen.add(jMenuSALIDAlIQUIDO);
-
-        jMenuISalidaSolido.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        jMenuISalidaSolido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-verde.png"))); // NOI18N
-        jMenuISalidaSolido.setText("Salida Solido");
-        JMenu_Iniciar_Almacen.add(jMenuISalidaSolido);
-
-        JmenuUnidad.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        JmenuUnidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-verde.png"))); // NOI18N
-        JmenuUnidad.setText("Salida Unidad");
-        JMenu_Iniciar_Almacen.add(JmenuUnidad);
-
         jMenuAbrirAlmacen.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
         jMenuAbrirAlmacen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Entrar 32.png"))); // NOI18N
-        jMenuAbrirAlmacen.setText("Abrir");
+        jMenuAbrirAlmacen.setText("Abrir Almacén");
+        jMenuAbrirAlmacen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAbrirAlmacenActionPerformed(evt);
+            }
+        });
         JMenu_Iniciar_Almacen.add(jMenuAbrirAlmacen);
-
-        JmenuAjusteLiquido.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        JmenuAjusteLiquido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-Rojo.png"))); // NOI18N
-        JmenuAjusteLiquido.setText("Ajuste Liquido");
-        JMenu_Iniciar_Almacen.add(JmenuAjusteLiquido);
-
-        JmenuAjsuteSolido.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        JmenuAjsuteSolido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-Rojo.png"))); // NOI18N
-        JmenuAjsuteSolido.setText("Ajsute Solido");
-        JMenu_Iniciar_Almacen.add(JmenuAjsuteSolido);
-
-        jMenuAjusteUnidad.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
-        jMenuAjusteUnidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-Rojo.png"))); // NOI18N
-        jMenuAjusteUnidad.setText("Ajuste Unidad");
-        JMenu_Iniciar_Almacen.add(jMenuAjusteUnidad);
 
         jMenuItemLiquidoSalida.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
         jMenuItemLiquidoSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/aceite-de-motor 32.png"))); // NOI18N
-        jMenuItemLiquidoSalida.setText("Liquido Salida");
+        jMenuItemLiquidoSalida.setText("Salida Liquido");
         JMenu_Iniciar_Almacen.add(jMenuItemLiquidoSalida);
 
         jMenuISALIDA_SOLIDO.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
         jMenuISALIDA_SOLIDO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/SalidaSolido 32.png"))); // NOI18N
-        jMenuISALIDA_SOLIDO.setText("Sólido Salida");
+        jMenuISALIDA_SOLIDO.setText("Salida Solido");
         JMenu_Iniciar_Almacen.add(jMenuISALIDA_SOLIDO);
 
         jMenuItemUnidaSalida.setFont(new java.awt.Font("Georgia", 1, 12)); // NOI18N
         jMenuItemUnidaSalida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/InventarioUnidad 32.png"))); // NOI18N
-        jMenuItemUnidaSalida.setText("Unidad Salida");
+        jMenuItemUnidaSalida.setText("Salida Unida");
         JMenu_Iniciar_Almacen.add(jMenuItemUnidaSalida);
+
+        jMenuItemAjusteLiquiod.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jMenuItemAjusteLiquiod.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AjusteLiquido 32.png"))); // NOI18N
+        jMenuItemAjusteLiquiod.setText("Ajuste Liquido");
+        JMenu_Iniciar_Almacen.add(jMenuItemAjusteLiquiod);
+
+        jMenuItemAjusteSolido.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jMenuItemAjusteSolido.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AjusteSolido 32.png"))); // NOI18N
+        jMenuItemAjusteSolido.setText("Ajuste Solido");
+        jMenuItemAjusteSolido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemAjusteSolidoActionPerformed(evt);
+            }
+        });
+        JMenu_Iniciar_Almacen.add(jMenuItemAjusteSolido);
+
+        jMenuItemAjusteUnidad.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jMenuItemAjusteUnidad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/AjusteUnidad 32.png"))); // NOI18N
+        jMenuItemAjusteUnidad.setText("Ajuste Unidad");
+        JMenu_Iniciar_Almacen.add(jMenuItemAjusteUnidad);
 
         JMenu.add(JMenu_Iniciar_Almacen);
 
@@ -338,6 +331,11 @@ public class Menu_Sistema extends javax.swing.JFrame {
         jMenuLibroDIARIO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-Amarrilo.png"))); // NOI18N
         jMenuLibroDIARIO.setText("Libro Diario");
         jMenuLibroContable.add(jMenuLibroDIARIO);
+
+        jMenuItemCuentasContables.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        jMenuItemCuentasContables.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-Amarrilo.png"))); // NOI18N
+        jMenuItemCuentasContables.setText("Cuentas Contables");
+        jMenuLibroContable.add(jMenuItemCuentasContables);
 
         JMenu.add(jMenuLibroContable);
 
@@ -436,17 +434,6 @@ public class Menu_Sistema extends javax.swing.JFrame {
 
     private void btbGestionarAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbGestionarAlmacenActionPerformed
 
-        try {
-            new Vista_Almacen.Gestionar_Almacenn().setVisible(true);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Menu_Sistema.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Menu_Sistema.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-this.dispose();
-
-
 
         // TODO add your handling code here:
     }//GEN-LAST:event_btbGestionarAlmacenActionPerformed
@@ -463,8 +450,7 @@ this.dispose();
     }//GEN-LAST:event_BotonCerraSeccionActionPerformed
 
     private void btbGestionarLibroContableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbGestionarLibroContableActionPerformed
-        new vista_Libro_Contable.Opciones().setVisible(true);
-this.dispose();
+
              // TODO add your handling code here:
     }//GEN-LAST:event_btbGestionarLibroContableActionPerformed
 
@@ -506,6 +492,14 @@ Funciones.ReporteMargenGanancia.mostrar();
         reporte_entrada_Inventario.mostrar(); 
     }//GEN-LAST:event_Menu_Reportes_Entradas_InventarioActionPerformed
 
+    private void jMenuItemAjusteSolidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAjusteSolidoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItemAjusteSolidoActionPerformed
+
+    private void jMenuAbrirAlmacenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAbrirAlmacenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuAbrirAlmacenActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -523,10 +517,7 @@ Funciones.ReporteMargenGanancia.mostrar();
     public javax.swing.JButton BotonCerraSeccion;
     public static javax.swing.JMenuBar JMenu;
     public static javax.swing.JMenu JMenu_Iniciar_Almacen;
-    public static javax.swing.JMenuItem JmenuAjsuteSolido;
-    public static javax.swing.JMenuItem JmenuAjusteLiquido;
     public static javax.swing.JMenuItem JmenuLibroMayor;
-    public static javax.swing.JMenuItem JmenuUnidad;
     public static javax.swing.JMenuItem Jmenu_Abri_Empleado;
     public static javax.swing.JMenuItem Jmenu_abrir_Proveedor;
     public static javax.swing.JMenuItem MenuCategoria;
@@ -553,11 +544,13 @@ Funciones.ReporteMargenGanancia.mostrar();
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     public static javax.swing.JMenuItem jMenuAbrirAlmacen;
-    public static javax.swing.JMenuItem jMenuAjusteUnidad;
     public static javax.swing.JMenuItem jMenuIInventarioUnidad;
     public static javax.swing.JMenuItem jMenuISALIDA_SOLIDO;
-    public static javax.swing.JMenuItem jMenuISalidaSolido;
     public static javax.swing.JMenuItem jMenuInventarioLiquido;
+    public static javax.swing.JMenuItem jMenuItemAjusteLiquiod;
+    public static javax.swing.JMenuItem jMenuItemAjusteSolido;
+    public static javax.swing.JMenuItem jMenuItemAjusteUnidad;
+    public static javax.swing.JMenuItem jMenuItemCuentasContables;
     public static javax.swing.JMenuItem jMenuItemInventarioSolido;
     public static javax.swing.JMenuItem jMenuItemLiquidoSalida;
     public static javax.swing.JMenuItem jMenuItemUnidaSalida;
@@ -567,7 +560,6 @@ Funciones.ReporteMargenGanancia.mostrar();
     public static javax.swing.JMenuItem jMenuProductoLiquido;
     public static javax.swing.JMenuItem jMenuProductoSolido;
     public static javax.swing.JMenuItem jMenuRegistrarUnidad;
-    public static javax.swing.JMenuItem jMenuSALIDAlIQUIDO;
     public static javax.swing.JMenu jMenu_Inventario;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSeparator jSeparator1;

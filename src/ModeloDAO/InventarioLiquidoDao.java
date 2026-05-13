@@ -11,7 +11,7 @@ import Modelo.Proveedor;
 import Modelo.Usuario;
 import Modelo.cuenta;
 import Validacion.Validar_Inventario_Liquido;
-import Vista_Almacen.Gestionar_Almacenn;
+
 import Vista_Almacen.Vista_Salida_Liquido;
 import Vista_GestionInventario.InventarioLiquido;
 import java.awt.Color;
@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import Vista_Almacen.Ajuste_Liquido;
 /**
  *
  * @author avila
@@ -227,6 +228,7 @@ public void MostrarVerInventarioLiquido() throws ClassNotFoundException, SQLExce
         sorterOriginal = (TableRowSorter<?>) InventarioLiquido.TablaLiquido.getRowSorter();
         InventarioLiquido.TablaLiquido.setRowSorter(null);
     }
+    
 
     // 3. Limpiar y llenar la tabla
     limpiarTabla(modeloInventarioLiquido);
@@ -943,4 +945,134 @@ private void cargarInformacionCompletaProducto(int idInventario) throws SQLExcep
     } 
     // finally { this.cerrarCn(); }  ← Descomenta si quieres cerrar la conexión aquí
 }
+
+
+
+    
+public void CargarComboxBoxLiquidoAjuste() throws ClassNotFoundException, SQLException {
+    ArrayList<Inventario> listaProducto = this.MostrarInventarioLiquidoCom();
+   
+    Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.removeAllItems();
+   
+    for (Inventario inve : listaProducto) {
+       Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.addItem(inve);
+    }
+    
+    // Removemos ActionListeners anteriores para evitar duplicados
+    for (ActionListener al :  Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.getActionListeners()) {
+     Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.removeActionListener(al);
+    }
+    
+    // Nuevo ActionListener
+    Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.addActionListener(e -> {
+        Inventario seleccionado = (Inventario)  Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.getSelectedItem();
+       
+        if (seleccionado != null) {
+            try {
+              /*  // Actualizamos el precio de venta desde el objeto del ComboBox
+                     
+                Vista_Salida_Liquido.txtPrecioVenta.setText(
+                    String.valueOf(seleccionado.getPrecio_Venta())
+                );
+                
+                */
+                // Cargamos la información completa en el TextArea
+                cargarInformacionCompletaProductoAjute(seleccionado.getIdinventario());
+                
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null,
+                    "Error al cargar información del producto:\n" + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
+    });
+}
+
+/**
+ * Carga toda la información completa del producto seleccionado en el TextArea
+ * (Sin incluir precios)
+ */
+private void cargarInformacionCompletaProductoAjute(int idInventario) throws SQLException, ClassNotFoundException {
+   
+    String sql = """
+        SELECT
+            p.nombre,
+            p.tipo_Liquido,
+            p.viscosidad,
+            p.densidad,
+            p.presentacion,
+            m.nombre AS marca,
+            i.Fecha_Vencimiento,
+            i.lote,
+            a.pasillo,
+            a.ala,
+            a.estante,
+            a.nivel
+        FROM inventario i
+        JOIN producto p ON i.idProducto = p.idProducto
+        JOIN marca m ON p.idMarca = m.idMarca
+        LEFT JOIN almacen a ON i.id_Ubicacion = a.id_ubicacion
+        WHERE i.id_inventario = ?
+        """;
+
+    try {
+        this.conectar();
+        
+        try (PreparedStatement ps = this.con.prepareStatement(sql)) {
+            
+            ps.setInt(1, idInventario);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                
+                if (rs.next()) {
+                    StringBuilder info = new StringBuilder();
+                    info.append("===        INFORMACIÓN COMPLETA      ===\n\n");
+                    info.append("Producto: ").append(rs.getString("nombre")).append("\n");
+                    info.append("Marca: ").append(rs.getString("marca")).append("\n");
+                    info.append("Tipo de Líquido: ").append(rs.getString("tipo_Liquido")).append("\n");
+                    info.append("Viscosidad: ").append(rs.getString("viscosidad")).append("\n");
+                    info.append("Densidad: ").append(rs.getString("densidad")).append("\n");
+                    info.append("Presentación: ").append(rs.getString("presentacion")).append("\n\n");
+                    
+                    info.append("=== INVENTARIO === \n");
+                    info.append("Lote: ").append(rs.getString("lote") != null ? rs.getString("lote") : "N/A").append("\n");
+                    info.append("Fecha de Vencimiento: ").append(rs.getString("Fecha_Vencimiento") != null ? rs.getString("Fecha_Vencimiento") : "N/A").append("\n\n");
+                    
+                    
+                    info.append("=== UBICACIÓN ===\n");
+                    if (rs.getString("pasillo") != null) {
+                        info.append("Pasillo: ").append(rs.getString("pasillo")).append("\n");
+                        info.append("Ala: ").append(rs.getString("ala")).append("\n");
+                        info.append("Estante: ").append(rs.getInt("estante")).append("\n");
+                        info.append("Nivel: ").append(rs.getInt("nivel")).append("\n");
+                    } else {
+                        info.append("Sin ubicación asignada\n");
+                    }
+                    
+                    Ajuste_Liquido.jTextAreaInformacionLiquidoAjuste.setText(info.toString());
+                    
+                } else {
+                   Ajuste_Liquido.jTextAreaInformacionLiquidoAjuste.setText("No se encontró información del producto.");
+                }
+            }
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null,
+            "Error al cargar información del producto:\n" + e.getMessage(),
+            "Error de Base de Datos",
+            JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    } 
+    // finally { this.cerrarCn(); }  ← Descomenta si quieres cerrar la conexión aquí
+}
+
+
+
+
+
+
+
+
 }

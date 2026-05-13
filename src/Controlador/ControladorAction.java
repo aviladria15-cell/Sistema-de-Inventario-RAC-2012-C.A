@@ -1,7 +1,7 @@
 package Controlador;
-import Funciones.Alerte_De_Stock;
+
 import Modelo.ConexiónBD;
-import ModeloDAO.InventarioUnidadDAO;
+
 import Vista_Usuari_Empleado.Login_Ingreso;
 import Vista_Usuari_Empleado.Menu_Sistema;
 import controladorLogin.ControladorLogin;
@@ -13,9 +13,9 @@ import java.sql.SQLException;
 import javax.swing.SwingUtilities;
 
 import java.awt.event.ItemEvent;
-import  Vista_Almacen.Gestionar_Almacenn;
 
-import Controlador.Controlador_Registro_Producto_Solido;
+
+
 
 public class ControladorAction implements ActionListener {
     
@@ -41,7 +41,7 @@ public class ControladorAction implements ActionListener {
    
   private Controlador_Proveedor controlador_Proveedor;
 
-   private  Gestionar_Almacenn almacen;
+
  
 
    
@@ -62,6 +62,11 @@ public class ControladorAction implements ActionListener {
    private Controlador_Inventario_Unidad controlador_Inventario_Unidad;
    private  Controlador_Salida_Solido controlador_Salida_Solido;
    private  Controlador_Salida_Unidad controlador_Salida_Unidad;
+   private  ControladorAjuste_Liquido controladorAjuste_Liquido;
+  private  Controlador_Ajuste_Solido controlador_Ajuste_Solido;
+  private Controlador_Ajuste_Unidad controlador_Ajuste_Unidad;
+  private Controlador_Almacen controlador_Almacen;
+  private Controlador_Cuentas_Contables  controlador_Cuentas_Contables;
    // esta variable se ultiliza en este caso para mostrar mostrar la contraseña si el usuario lo desea
    private char echoCharOriginal;
    
@@ -122,14 +127,9 @@ public class ControladorAction implements ActionListener {
                      this.menu.Menu_cotizacion.addActionListener(this);
                    this.menu.BotonCerraSeccion.addActionListener(this);
                    this.menu.jMenuIuSUARIOS.addActionListener(this);
-                   //almacen
-                   this.menu.jMenuSALIDAlIQUIDO.addActionListener(this);
-                   this.menu.jMenuAbrirAlmacen.addActionListener(this);
-                   this.menu.jMenuISalidaSolido.addActionListener(this);
-                   this.menu.JmenuUnidad.addActionListener(this);
-                   this.menu.JmenuAjusteLiquido.addActionListener(this);
-                   this.menu.JmenuAjsuteSolido.addActionListener(this);
-                   this.menu.jMenuAjusteUnidad.addActionListener(this);
+             
+                
+                 
                    
                    // inventario
              
@@ -137,6 +137,7 @@ public class ControladorAction implements ActionListener {
                    //Libro contables
                    this.menu.JmenuLibroMayor.addActionListener(this);
                    this.menu.jMenuLibroDIARIO.addActionListener(this);
+                   this.menu.jMenuItemCuentasContables.addActionListener(this);
                    
                    // Productos
                    this.menu.jMenuProductoLiquido.addActionListener(this);
@@ -151,7 +152,10 @@ public class ControladorAction implements ActionListener {
                    this.menu.jMenuItemLiquidoSalida.addActionListener(this);
                    this.menu.jMenuISALIDA_SOLIDO.addActionListener(this);
                    this.menu.jMenuItemUnidaSalida.addActionListener(this);
-                   
+                   this.menu.jMenuItemAjusteLiquiod.addActionListener(this);
+                   this.menu.jMenuItemAjusteSolido.addActionListener(this);
+                   this.menu.jMenuItemAjusteUnidad.addActionListener(this);
+                      this.menu.jMenuAbrirAlmacen.addActionListener(this);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -180,6 +184,59 @@ public class ControladorAction implements ActionListener {
         V
         
         */
+        
+        
+        else if (e.getSource() == menu.jMenuItemCuentasContables){
+            if (controlador_Cuentas_Contables == null) {
+                controlador_Cuentas_Contables = new Controlador_Cuentas_Contables(menu);
+                
+            }
+            
+            controlador_Cuentas_Contables.MostrarVista();
+        }
+        
+        
+        else if (e.getSource() == menu.jMenuAbrirAlmacen){
+            if (controlador_Almacen == null) {
+                
+                controlador_Almacen = new Controlador_Almacen(menu);
+                
+            }
+            
+            controlador_Almacen.MostraVista();
+        }
+        
+        else if (e.getSource() == menu.jMenuItemAjusteUnidad){
+            if (controlador_Ajuste_Unidad == null) {
+
+            controlador_Ajuste_Unidad = new Controlador_Ajuste_Unidad(menu);
+                
+            }
+            
+            controlador_Ajuste_Unidad.MostrarVistaAjusteUnidad();
+        }
+        
+        else if (e.getSource() == menu.jMenuItemAjusteSolido){
+            
+            if (controlador_Ajuste_Solido == null) {
+                
+                controlador_Ajuste_Solido = new Controlador_Ajuste_Solido(menu);
+                
+            }
+            
+            controlador_Ajuste_Solido.MOstrarVista();
+            
+        }
+        
+        else if (e.getSource() == menu.jMenuItemAjusteLiquiod){
+            if (controladorAjuste_Liquido == null) {
+                
+                controladorAjuste_Liquido = new ControladorAjuste_Liquido(menu);
+                
+            }
+            
+            controladorAjuste_Liquido.MostrarVistaAjusteLiquido();
+        }
         
         else if (e.getSource() == menu.jMenuItemLiquidoSalida){
             if (controlador_Liquido_Salida == null) {
@@ -566,184 +623,6 @@ controlador_Registro_Producto_Solido = new Controlador_Registro_Producto_Solido(
         V
     */
    
-        else if (e.getSource() == menu.jMenuAbrirAlmacen){
-           
-            if (almacen == null){
-                try {
-                    almacen = new Gestionar_Almacenn();
-                   almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-             
-            }
-           
-            almacen.setVisible(true);
-         
-            menu.setVisible(false);
-           
-          
-        }
-       
-       
-       
-        else if (e.getSource() == menu.jMenuSALIDAlIQUIDO){
-            if (almacen == null) {
-                try {
-                    almacen = new Gestionar_Almacenn();
-                     almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-               
-            }
-           
-            almacen.setVisible(true);
-           
-              controladorVisual cts = new controladorVisual();
-            cts .RegistrarSalidaDelAlmacendeSOLIDO();
-        
-            cts.SalidaLiquido();
-            menu.setVisible(false);
-           
-           
-           menu.dispose();
-        }
-       
-        else if (e.getSource() == menu.jMenuISalidaSolido){
-           
-            if ( almacen == null) {
-               
-                try {
-                    almacen = new Gestionar_Almacenn();
-                     almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-            }
-           
-            almacen.setVisible(true);
-              controladorVisual cts = new controladorVisual();
-                cts .RegistrarSalidaDelAlmacendeSOLIDO();
-              
-              cts.SALIDASolido();
-             
-              menu.setVisible(false);
-         
-        }
-        
-        
-        else if (e.getSource() == almacen.btbVolverMenu){
-            controladorVisual cts = new controladorVisual();
-            cts.MENU();
-            cts. VOLVERLALMACEN ();
-            almacen.setVisible(false);
-            menu.setVisible(true);
-            
-            
-        }
-        
-        else if (e.getSource() == menu.JmenuUnidad){
-            
-            if (almacen == null) {
-                
-                try {
-                    almacen = new Gestionar_Almacenn();
-                     almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-        
-            }
-  
-            controladorVisual cts = new controladorVisual();
-             cts .RegistrarSalidaDelAlmacendeSOLIDO();
-            almacen.setVisible(true);
-        menu.setVisible(false);
-            cts.SalidaUnidadAlmacen();
-            
-            
-        }
-        
-        else if (e.getSource() == menu.JmenuAjusteLiquido){
-            
-            if (almacen == null) {
-                
-                try {
-                    almacen = new Gestionar_Almacenn();
-                     almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-                
-            }
-            
-            controladorVisual cts = new controladorVisual();
-            almacen.setVisible(true);
-             cts .RegistrarSalidaDelAlmacendeSOLIDO();
-            cts.AjusteLiquido(); 
-            
-             
-             menu.setVisible(false);
-            
-        }
-        
-        else if (e.getSource() == menu.JmenuAjsuteSolido){
-            if (almacen == null) {
-                
-                try {
-                    almacen = new Gestionar_Almacenn();
-                       almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-                
-                
-            }
-            
-            controladorVisual cts = new controladorVisual();
-            almacen.setVisible(true);
-               cts .RegistrarSalidaDelAlmacendeSOLIDO();
-        cts.AjustesSolido();
-  
-            menu.setVisible(false);
-        }
-        
-        else if (e.getSource() == menu.jMenuAjusteUnidad){
-            
-            if (almacen == null) {
-                
-                try {
-                    almacen = new Gestionar_Almacenn();
-                      almacen.btbVolverMenu.addActionListener(this);
-                } catch (ClassNotFoundException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                } catch (SQLException ex) {
-                    System.getLogger(ControladorAction.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-                }
-                
-            }
-            
-            controladorVisual cts = new controladorVisual();
-            almacen.setVisible(true);
-             cts .RegistrarSalidaDelAlmacendeSOLIDO();
-            cts.AjusteUnidad();
-            
-            menu.setVisible(false);
-            
-        }
         
         
      

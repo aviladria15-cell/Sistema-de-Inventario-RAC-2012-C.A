@@ -4,8 +4,6 @@
  */
 package Validacion;
 
-
-import Vista_Almacen.Gestionar_Almacenn;
 import ModeloDAO.MovientosDao;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -183,5 +181,5 @@ public class Validar_Ajuste_Unidad {
     }
     
     
-    
 }
+

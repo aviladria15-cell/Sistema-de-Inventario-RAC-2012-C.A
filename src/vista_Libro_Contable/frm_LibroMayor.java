@@ -117,7 +117,7 @@ public class frm_LibroMayor extends javax.swing.JFrame {
         });
         jPanel1.add(btbFiltarCuenta, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 670, 120, -1));
 
-        Fondo_Pantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/FondoCompleto.png"))); // NOI18N
+        Fondo_Pantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/fondoMordeno.jpg"))); // NOI18N
         jPanel1.add(Fondo_Pantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, -4, 1390, 750));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1390, 744));

@@ -4,10 +4,7 @@
  */
 package vista_Libro_Contable;
 
-import ModeloDAO.AsientosDao;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -18,12 +15,12 @@ public class frm_AsientoContable extends javax.swing.JFrame {
     /**
      * Creates new form frm_AsientoContable
      */
-    public frm_AsientoContable() throws ClassNotFoundException, SQLException {
+    public frm_AsientoContable()  {
         initComponents();
         setTitle("Asientos Contables");
         setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
-        As.MostrarAsientosContables();
+       
     }
 
     /**
@@ -40,13 +37,13 @@ public class frm_AsientoContable extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TablaAsiento = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btbAtras = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jDateDesde = new com.toedter.calendar.JDateChooser();
         jLabel5 = new javax.swing.JLabel();
         jDateHasta = new com.toedter.calendar.JDateChooser();
-        jButton2 = new javax.swing.JButton();
+        btbFiltrarAsientos = new javax.swing.JButton();
         Fondo_Pantalla = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,15 +77,15 @@ public class frm_AsientoContable extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, 1220, 390));
 
-        jButton1.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Atras.png"))); // NOI18N
-        jButton1.setText("Atrás");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btbAtras.setFont(new java.awt.Font("Georgia", 1, 14)); // NOI18N
+        btbAtras.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Atras.png"))); // NOI18N
+        btbAtras.setText("Atrás");
+        btbAtras.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btbAtrasActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 650, 120, 40));
+        jPanel1.add(btbAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 650, 120, 40));
 
         jLabel3.setFont(new java.awt.Font("Georgia", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -107,16 +104,16 @@ public class frm_AsientoContable extends javax.swing.JFrame {
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 600, -1, -1));
         jPanel1.add(jDateHasta, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 600, 180, 30));
 
-        jButton2.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
-        jButton2.setText("Filtrar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btbFiltrarAsientos.setFont(new java.awt.Font("Georgia", 1, 18)); // NOI18N
+        btbFiltrarAsientos.setText("Filtrar");
+        btbFiltrarAsientos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btbFiltrarAsientosActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 680, 130, -1));
+        jPanel1.add(btbFiltrarAsientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 680, 130, -1));
 
-        Fondo_Pantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/FondoCompleto.png"))); // NOI18N
+        Fondo_Pantalla.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/fondoMordeno.jpg"))); // NOI18N
         jPanel1.add(Fondo_Pantalla, new org.netbeans.lib.awtextra.AbsoluteConstraints(-3, -4, 1380, 750));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1377, 748));
@@ -124,41 +121,27 @@ public class frm_AsientoContable extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btbAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbAtrasActionPerformed
 
-        try {
-            new frm_libroDiario().setVisible(true);
-            
-            
-            
-            // TODO add your handling code here:
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(frm_AsientoContable.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(frm_AsientoContable.class.getName()).log(Level.SEVERE, null, ex);
-        }
+     
         
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            As.FiltrarAsientoContablePorFecha(TablaAsiento, jDateDesde, jDateHasta);        // TODO add your handling code here:
-        } catch (SQLException ex) {
-            Logger.getLogger(frm_AsientoContable.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btbAtrasActionPerformed
+
+    private void btbFiltrarAsientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbFiltrarAsientosActionPerformed
+
+    }//GEN-LAST:event_btbFiltrarAsientosActionPerformed
 
     /**
      * @param args the command line arguments
      */
-ModeloDAO.AsientosDao As = new AsientosDao();
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Fondo_Pantalla;
     public static javax.swing.JTable TablaAsiento;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    public static javax.swing.JButton btbAtras;
+    public static javax.swing.JButton btbFiltrarAsientos;
     public static com.toedter.calendar.JDateChooser jDateDesde;
     public static com.toedter.calendar.JDateChooser jDateHasta;
     private javax.swing.JLabel jLabel1;

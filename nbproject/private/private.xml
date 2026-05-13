@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="3">
+        <file>
+            <url>src/Controlador/controladorVisual.java</url>
+            <bookmark id="3">
+                <name/>
+                <line>36</line>
+                <key/>
+            </bookmark>
+        </file>
         <file>
             <url>src/Controlador/ControladorAction.java</url>
             <bookmark id="1">
                 <name/>
-                <line>392</line>
+                <line>449</line>
                 <key/>
             </bookmark>
         </file>

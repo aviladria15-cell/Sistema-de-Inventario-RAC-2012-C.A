@@ -17,12 +17,12 @@ public class frm_libroDiario extends javax.swing.JFrame {
     /**
      * Creates new form frm_libroDiario
      */
-    public frm_libroDiario() throws ClassNotFoundException, SQLException {
+    public frm_libroDiario() {
         initComponents();
         setTitle("Libro Diario");
         setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
-        Ll.MostrarListaLibroContable();
+   
        
         
       
@@ -130,7 +130,7 @@ public class frm_libroDiario extends javax.swing.JFrame {
         });
         jPanel1.add(btbFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 680, 160, -1));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/FondoCompleto.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/fondoMordeno.jpg"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -4, 1370, 750));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -165,7 +165,6 @@ public class frm_libroDiario extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-ModeloDAO.LibroDiarioDao Ll = new  LibroDiarioDao();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JTable TablaLibroDiario;

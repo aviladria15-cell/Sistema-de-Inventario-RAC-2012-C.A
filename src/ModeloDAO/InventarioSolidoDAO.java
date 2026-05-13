@@ -12,7 +12,7 @@ import Modelo.Producto;
 import Modelo.Proveedor;
 import Modelo.Usuario;
 import Modelo.cuenta;
-import Vista_Almacen.Gestionar_Almacenn;
+import Vista_Almacen.Ajuste_Solido;
 
 import Vista_GestionInventario.InventarioSolido;
 import javax.swing.table.DefaultTableModel;
@@ -868,4 +868,114 @@ public void CargarComboxBoxSOLIDO() throws ClassNotFoundException, SQLException 
 }
  
     
+private void cargarInformacionCompletaProductoSolidoAjuste(int idInventario) throws SQLException, ClassNotFoundException {
+    
+    String sql = """
+        SELECT 
+            p.nombre,
+            p.condicion,
+            p.compatibilidad,
+            p.unidad_De_Medidad,
+            m.nombre AS marca,
+            i.Fecha_Vencimiento,
+            i.lote,
+            i.Cantidad_Disponible,
+            a.pasillo,
+            a.ala,
+            a.estante,
+            a.nivel
+        FROM inventario i
+        JOIN producto p ON i.idProducto = p.idProducto
+        JOIN marca m ON p.idMarca = m.idMarca
+        LEFT JOIN almacen a ON i.id_Ubicacion = a.id_ubicacion
+        WHERE i.id_inventario = ?
+        """;
+
+    try {
+        this.conectar();
+        
+        try (PreparedStatement ps = this.con.prepareStatement(sql)) {
+            ps.setInt(1, idInventario);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    StringBuilder info = new StringBuilder();
+                    info.append("===   INFORMACIÓN COMPLETA   ===\n\n");
+                    info.append("Producto : ").append(rs.getString("nombre")).append("\n");
+                    info.append("Marca : ").append(rs.getString("marca")).append("\n");
+                    info.append("Condición : ").append(rs.getString("condicion") != null ? rs.getString("condicion") : "N/A").append("\n");
+                    info.append("Compatibilidad: ").append(rs.getString("compatibilidad") != null ? rs.getString("compatibilidad") : "N/A").append("\n");
+                    info.append("Unidad Medida : ").append(rs.getString("unidad_De_Medidad") != null ? rs.getString("unidad_De_Medidad") : "N/A").append("\n\n");
+                    
+                    info.append("=== INVENTARIO ===\n");
+                    info.append("Lote : ").append(rs.getString("lote") != null ? rs.getString("lote") : "N/A").append("\n\n");
+                    //info.append("Fecha Vencimiento  : ").append(rs.getString("Fecha_Vencimiento") != null ? rs.getString("Fecha_Vencimiento") : "N/A").append("\n");
+                  //  info.append("Cantidad Disponible: ").append(rs.getInt("Cantidad_Disponible")).append("\n\n");
+                    
+                    info.append("=== UBICACIÓN ===\n");
+                    if (rs.getString("pasillo") != null) {
+                        info.append("Pasillo : ").append(rs.getString("pasillo")).append("\n");
+                        info.append("Ala : ").append(rs.getString("ala")).append("\n");
+                        info.append("Estante : ").append(rs.getInt("estante")).append("\n");
+                        info.append("Nivel : ").append(rs.getInt("nivel")).append("\n");
+                    } else {
+                        info.append("Sin ubicación asignada\n");
+                    }
+
+                   Ajuste_Solido.TxtAreaInformacionProducto.setText(info.toString());
+                    
+                } else {
+                     Ajuste_Solido.TxtAreaInformacionProducto.setText("No se encontró información del producto.");
+                }
+            }
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Error al cargar información del producto sólido:\n" + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+}
+
+
+public void CargarComboxBoxSOLIDOAjuste() throws ClassNotFoundException, SQLException {
+    ArrayList<Inventario> listaProducto = this.MostrarInventarioSolidoCom();
+    
+    // Limpiamos el ComboBox
+  Ajuste_Solido.jComboBoxProducto.removeAllItems();
+    
+    // Agregamos los productos
+    for (Inventario inve : listaProducto) {
+        Ajuste_Solido.jComboBoxProducto.addItem(inve);  // ← Corregido
+    }
+    
+    // Removemos listeners anteriores para evitar duplicados
+    for (ActionListener al : Ajuste_Solido.jComboBoxProducto.getActionListeners()) {
+      Ajuste_Solido.jComboBoxProducto.removeActionListener(al);
+    }
+    
+    // ActionListener mejorado
+   Ajuste_Solido.jComboBoxProducto.addActionListener(e -> {
+        Inventario seleccionado = (Inventario)Ajuste_Solido.jComboBoxProducto.getSelectedItem();
+        
+        if (seleccionado != null) {
+            try {
+             /*   // Actualizar precio
+                Vista_Salida_Solido.txtPrecioVentaUnitario.setText(
+                    String.valueOf(seleccionado.getPrecio_Venta())
+                );
+                */
+                // Cargar información completa
+                cargarInformacionCompletaProductoSolidoAjuste(seleccionado.getIdinventario());
+                
+            } catch (SQLException | ClassNotFoundException ex) {
+                JOptionPane.showMessageDialog(null,
+                    "Error al cargar información del producto:\n" + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        }
+    });
+}
+ 
 }

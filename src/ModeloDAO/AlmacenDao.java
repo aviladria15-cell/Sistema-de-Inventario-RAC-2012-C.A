@@ -4,15 +4,13 @@ package ModeloDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.*;
-import Vista_Almacen.Gestionar_Almacenn;
 import Modelo.Almacen;
 import Modelo.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.swing.JOptionPane;
-
-import Vista_Gestion_Categoria.frm_Categoria;
+import Vista_Almacen.Vista_Registrar_Almacen;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -53,7 +51,7 @@ Controlador.controladorVisual ct = new  Controlador.controladorVisual();
    
     String Titulo [] = { "ID_Ubicación","PASILLO"," ALA  ", " ESTANTE ","NIVEL"," CAPACIDAD " ," PRODUCTO ", " STOCK ACTUAL " };
     modeloAlmacen.setColumnIdentifiers(Titulo);
-  Gestionar_Almacenn.TablaAlmacen.setModel(modeloAlmacen);
+  Vista_Registrar_Almacen.TablaAlmacen.setModel(modeloAlmacen);
  
     
 }
@@ -98,15 +96,15 @@ public  void RegistrarAlmacen () throws ClassNotFoundException,SQLException {
    
     
     
-    A.setPasillo(Gestionar_Almacenn.txtPasillolmacen.getText());
+    A.setPasillo(Vista_Registrar_Almacen.txtPasillo.getText());
     
-     A.setAla((String) Gestionar_Almacenn.ComboxAla.getSelectedItem());
+     A.setAla((String) Vista_Registrar_Almacen.jComboBoxAla.getSelectedItem());
     
-    A.setEstante(Gestionar_Almacenn.txtEstanteAlmacen.getText());
+    A.setEstante(Vista_Registrar_Almacen.txtEstante.getText());
     
-    A.setNivel(Integer.parseInt(Gestionar_Almacenn.txtNivel.getText()));
+    A.setNivel(Integer.parseInt(Vista_Registrar_Almacen.txtNivel.getText()));
     
-    A.setCapacidad(Integer.parseInt(Gestionar_Almacenn.txtCapacidadAlmacen.getText()));
+    A.setCapacidad(Integer.parseInt(Vista_Registrar_Almacen.txtCapacidad.getText()));
     
     String sql = "INSERT INTO almacen (pasillo,ala,estante,nivel,capacidad) values (?,?,?,?,?)";
     
@@ -126,10 +124,10 @@ public  void RegistrarAlmacen () throws ClassNotFoundException,SQLException {
             
             JOptionPane.showMessageDialog(null,"Registro exitoso de almacen");
             MostrarAlmacen();
-             Gestionar_Almacenn.txtCapacidadAlmacen.setText("");
-             Gestionar_Almacenn.txtEstanteAlmacen.setText("");
-             Gestionar_Almacenn.txtNivel.setText("");
-             Gestionar_Almacenn.txtPasillolmacen.setText(" ");
+       Vista_Registrar_Almacen.txtCapacidad.setText("");
+             Vista_Registrar_Almacen.txtEstante.setText("");
+             Vista_Registrar_Almacen.txtNivel.setText("");
+             Vista_Registrar_Almacen.txtPasillo.setText(" ");
             
         }
         
@@ -145,20 +143,20 @@ public  void RegistrarAlmacen () throws ClassNotFoundException,SQLException {
 
 
 
-public  void ActualizarAlmacen () throws  ClassNotFoundException,SQLException {
+public  void ActualizarAlmacen (int idUbicacion) throws  ClassNotFoundException,SQLException {
     
        
-    A.setPasillo(Gestionar_Almacenn.txtPasillolmacen.getText());
+    A.setPasillo(Vista_Registrar_Almacen.txtPasillo.getText());
     
-     A.setAla((String) Gestionar_Almacenn.ComboxAla.getSelectedItem());
+     A.setAla((String) Vista_Registrar_Almacen.jComboBoxAla.getSelectedItem());
     
-    A.setEstante(Gestionar_Almacenn.txtEstanteAlmacen.getText());
+    A.setEstante(Vista_Registrar_Almacen.txtEstante.getText());
     
-    A.setNivel(Integer.parseInt(Gestionar_Almacenn.txtNivel.getText()));
+    A.setNivel(Integer.parseInt(Vista_Registrar_Almacen.txtNivel.getText()));
     
-    A.setCapacidad(Integer.parseInt(Gestionar_Almacenn.txtCapacidadAlmacen.getText()));
+    A.setCapacidad(Integer.parseInt(Vista_Registrar_Almacen.txtCapacidad.getText()));
     
-    A.setId_Ubicacion(Integer.parseInt(Gestionar_Almacenn.txtIDAlmacen.getText()));
+    //A.setId_Ubicacion(Integer.parseInt(Gestionar_Almacenn.txtIDAlmacen.getText()));
     
     
     
@@ -174,17 +172,27 @@ public  void ActualizarAlmacen () throws  ClassNotFoundException,SQLException {
         ps.setString(3, A.getEstante());
         ps.setInt(4, A.getNivel());
         ps.setInt(5, A.getCapacidad());
-        ps.setInt(6, A.getId_Ubicacion());
+        ps.setInt(6, idUbicacion);
         
         int fila = ps.executeUpdate();
         
         if (fila > 0) {
       
               JOptionPane.showMessageDialog(null, "Actualizacion exitosa");
-              MostrarAlmacen();
-              
-          ct.CancelarActualizaciondeAlmacen();
-              
+             
+               MostrarAlmacen();
+       Vista_Registrar_Almacen.btbEliminar.setVisible(true);
+  Vista_Registrar_Almacen.btbActualizar.setVisible(true);
+  Vista_Registrar_Almacen.btbRegistrar.setVisible(true);
+  
+  Vista_Registrar_Almacen.btbCancelarActualizacion.setVisible(false);
+  Vista_Registrar_Almacen.btbConfirmarActualizacion.setVisible(false);
+  
+  Vista_Registrar_Almacen.txtPasillo.setText("");
+  Vista_Registrar_Almacen.txtEstante.setText("");
+  Vista_Registrar_Almacen.txtCapacidad.setText("");
+  Vista_Registrar_Almacen.txtNivel.setText("");
+         
               
         } else {
             JOptionPane.showMessageDialog(null, "Error al Actualizar ");
@@ -198,6 +206,39 @@ public  void ActualizarAlmacen () throws  ClassNotFoundException,SQLException {
         this.cerrarCn();
     }
     
+}
+
+
+
+public  void ActualizarConseguridad (){
+      int filaSeleccionada = Vista_Registrar_Almacen.TablaAlmacen.getSelectedRow();
+
+    if (filaSeleccionada == -1) {
+       // JOptionPane.showMessageDialog(null, "Por favor seleccione una Ubicación si la desea eliminar");
+        return; // 🔴 salir del método, así no sigue ejecutando
+    }
+
+    int id_Ubicacion = Integer.parseInt(Vista_Registrar_Almacen.TablaAlmacen.getValueAt(filaSeleccionada, 0).toString()
+    );
+
+    int confirmar = JOptionPane.showConfirmDialog(
+        null,
+        "¿Está seguro de querer actualizar esta ubicación?",
+        "Confirmar Actualización",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirmar == JOptionPane.YES_OPTION) {
+        
+          try {
+              ActualizarAlmacen(id_Ubicacion);
+          } catch (ClassNotFoundException ex) {
+              System.getLogger(AlmacenDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+          } catch (SQLException ex) {
+              System.getLogger(AlmacenDao.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+          }
+      
+    }
 }
 
 
@@ -245,14 +286,14 @@ public  void EliminarAlmacen ( int Id_Ubicacion) throws  ClassNotFoundException,
     
     
 public void EliminarConSeguridad() {
-    int filaSeleccionada = Gestionar_Almacenn.TablaAlmacen.getSelectedRow();
+    int filaSeleccionada = Vista_Registrar_Almacen.TablaAlmacen.getSelectedRow();
 
     if (filaSeleccionada == -1) {
         JOptionPane.showMessageDialog(null, "Por favor seleccione una Ubicación si la desea eliminar");
         return; // 🔴 salir del método, así no sigue ejecutando
     }
 
-    int id_Ubicacion = Integer.parseInt(Gestionar_Almacenn.TablaAlmacen.getValueAt(filaSeleccionada, 0).toString()
+    int id_Ubicacion = Integer.parseInt(Vista_Registrar_Almacen.TablaAlmacen.getValueAt(filaSeleccionada, 0).toString()
     );
 
     int confirmar = JOptionPane.showConfirmDialog(
@@ -291,31 +332,45 @@ public void EliminarConSeguridad() {
 public void MostrarAlmacen() throws ClassNotFoundException, SQLException {
 
     TituloAlmacen();
-    limpiarTablaAlmacen();
+   
 
     ArrayList<Almacen> LsitaTerminada = ListaDeAlamcen();
 
-    modeloAlmacen = (DefaultTableModel) Gestionar_Almacenn.TablaAlmacen.getModel();
+    modeloAlmacen = (DefaultTableModel) Vista_Registrar_Almacen.TablaAlmacen.getModel();
+    
+    
+       TableRowSorter<?> sorterOriginal = null;
+    if (Vista_Registrar_Almacen.TablaAlmacen.getRowSorter() != null) {
+        sorterOriginal = (TableRowSorter<?>) Vista_Registrar_Almacen.TablaAlmacen.getRowSorter();
+        Vista_Registrar_Almacen.TablaAlmacen.setRowSorter(null);
+    }
+    
+    limpiarTablaAlmacen();
 
     // Ahora necesitamos 7 columnas (id, pasillo, ala, estante, capacidad, producto, stock)
     Object[] obj = new Object[9];
 
-    for (int i = 0; i < LsitaTerminada.size(); i++) {
-        obj[0] = LsitaTerminada.get(i).getId_Ubicacion();
-        obj[1] = LsitaTerminada.get(i).getPasillo();
-        obj[2] = LsitaTerminada.get(i).getAla();
-        obj[3] = LsitaTerminada.get(i).getEstante();
-        obj [4] =LsitaTerminada.get(i).getNivel();
-        obj[5] = LsitaTerminada.get(i).getCapacidad();
-        obj[6] = LsitaTerminada.get(i).getProducto();
-        obj[7] = LsitaTerminada.get(i).getStock();
+    for (Almacen almacen : LsitaTerminada) {
+        obj[0] = almacen.getId_Ubicacion();
+        obj[1] = almacen.getPasillo();
+        obj[2] = almacen.getAla();
+        obj[3] = almacen.getEstante();
+        obj [4] = almacen.getNivel();
+        obj[5] = almacen.getCapacidad();
+        obj[6] = almacen.getProducto();
+        obj[7] = almacen.getStock();
 
         modeloAlmacen.addRow(obj);
     }
 
-    Gestionar_Almacenn.TablaAlmacen.setModel(modeloAlmacen);
+    
+       if (sorterOriginal != null) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloAlmacen);
+      Vista_Registrar_Almacen.TablaAlmacen.setRowSorter(sorter);
+    }
+  Vista_Registrar_Almacen.TablaAlmacen.setModel(modeloAlmacen);
 
-    centrarTextoTabla(Gestionar_Almacenn.TablaAlmacen);
+    centrarTextoTabla(Vista_Registrar_Almacen.TablaAlmacen);
 
 }
 
@@ -345,7 +400,8 @@ private ArrayList<Almacen> ListaDeAlamcen() throws ClassNotFoundException, SQLEx
             "i.Cantidad_Disponible " +
             "FROM almacen a " +
             "LEFT JOIN inventario i ON a.id_Ubicacion = i.id_Ubicacion " +  // relación por id_Ubicacion
-            "LEFT JOIN producto p ON i.idProducto = p.idProducto";
+            "LEFT JOIN producto p ON i.idProducto = p.idProducto " +
+             "ORDER BY a.id_Ubicacion";
 
     try {
         this.conectar();
@@ -458,10 +514,10 @@ private void actualizarComboBoxInventarioLiquido() {
 
 public void agregarFiltroBusqueda() {
     // Verifica que el campo de búsqueda y la tabla existan
-    if (Gestionar_Almacenn.txtBuscarAlmacen != null && Gestionar_Almacenn.TablaAlmacen != null) {
+    if (Vista_Registrar_Almacen.txtBuscarProductoEnTabla != null && Vista_Registrar_Almacen.TablaAlmacen != null) {
 
         // Agregamos un listener persistente
-       Gestionar_Almacenn.txtBuscarAlmacen.getDocument().addDocumentListener(new DocumentListener() {
+     Vista_Registrar_Almacen.txtBuscarProductoEnTabla.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -479,16 +535,16 @@ public void agregarFiltroBusqueda() {
             }
 
             private void buscar() {
-                String texto = Gestionar_Almacenn.txtBuscarAlmacen.getText().trim();
+                String texto = Vista_Registrar_Almacen.txtBuscarProductoEnTabla.getText().trim();
 
                 // Siempre obtener el modelo actual
-                DefaultTableModel modeloActual = (DefaultTableModel) Gestionar_Almacenn.TablaAlmacen.getModel();
+                DefaultTableModel modeloActual = (DefaultTableModel) Vista_Registrar_Almacen.TablaAlmacen.getModel();
 
                 // Verificar o crear sorter
-                TableRowSorter<?> sorter = (TableRowSorter<?>) Gestionar_Almacenn.TablaAlmacen.getRowSorter();
+                TableRowSorter<?> sorter = (TableRowSorter<?>) Vista_Registrar_Almacen.TablaAlmacen.getRowSorter();
                 if (sorter == null || sorter.getModel() != modeloActual) {
                     sorter = new TableRowSorter<>(modeloActual);
-                    Gestionar_Almacenn.TablaAlmacen.setRowSorter(sorter);
+                   Vista_Registrar_Almacen.TablaAlmacen.setRowSorter(sorter);
                 }
 
                 // Aplicar o limpiar filtro

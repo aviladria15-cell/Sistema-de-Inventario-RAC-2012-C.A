@@ -5,7 +5,7 @@
 // Funciones/BCV.java
 package Funciones;
 
-import Vista_Almacen.Gestionar_Almacenn;
+
 import java.io.*;
 import java.net.*;
 import java.time.LocalDateTime;

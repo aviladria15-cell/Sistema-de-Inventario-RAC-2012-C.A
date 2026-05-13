@@ -6,7 +6,7 @@ package Validacion;
 
 import Modelo.Almacen;
 import ModeloDAO.AlmacenDao;
-import Vista_Almacen.Gestionar_Almacenn;
+import Vista_Almacen.Vista_Registrar_Almacen;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -27,25 +27,25 @@ public class Validar_Almacen extends AlmacenDao {
     ocultarTodosErroresAlmacen();
 
     // === APLICAR FILTROS ===
-    aplicarFiltroAlfanumericoConGuion(Gestionar_Almacenn.txtPasillolmacen);
-    aplicarFiltroSoloNumeros(Gestionar_Almacenn.txtNivel);
-    aplicarFiltroSoloNumeros(Gestionar_Almacenn.txtEstanteAlmacen);
-    aplicarFiltroSoloNumeros(Gestionar_Almacenn.txtCapacidadAlmacen);
+    aplicarFiltroAlfanumericoConGuion(Vista_Registrar_Almacen.txtPasillo);
+    aplicarFiltroSoloNumeros(Vista_Registrar_Almacen.txtNivel);
+    aplicarFiltroSoloNumeros(Vista_Registrar_Almacen.txtEstante);
+    aplicarFiltroSoloNumeros(Vista_Registrar_Almacen.txtCapacidad);
 
     // === VALIDACIÓN EN TIEMPO REAL ===
-    Gestionar_Almacenn.txtPasillolmacen.getDocument()
+    Vista_Registrar_Almacen.txtPasillo.getDocument()
         .addDocumentListener(new SimpleDocumentListener(this::validarPasillo));
     
-    Gestionar_Almacenn.txtNivel.getDocument()
+Vista_Registrar_Almacen.txtNivel.getDocument()
         .addDocumentListener(new SimpleDocumentListener(this::validarNivel));
     
-    Gestionar_Almacenn.txtEstanteAlmacen.getDocument()
+    Vista_Registrar_Almacen.txtEstante.getDocument()
         .addDocumentListener(new SimpleDocumentListener(this::validarEstante));
     
-    Gestionar_Almacenn.txtCapacidadAlmacen.getDocument()
+    Vista_Registrar_Almacen.txtCapacidad.getDocument()
         .addDocumentListener(new SimpleDocumentListener(this::validarCapacidad));
     
-    Gestionar_Almacenn.ComboxAla.addActionListener(e -> validarAla());
+    Vista_Registrar_Almacen.jComboBoxAla.addActionListener(e -> validarAla());
 }
 
    
@@ -93,71 +93,71 @@ public class Validar_Almacen extends AlmacenDao {
     // ------------------- VALIDACIONES -------------------
 
    private void validarPasillo() {
-    String pasillo = Gestionar_Almacenn.txtPasillolmacen.getText().trim();
+    String pasillo = Vista_Registrar_Almacen.txtPasillo.getText().trim();
     if (pasillo.isEmpty()) {
-        mostrarError(Gestionar_Almacenn.lblPasilloValidacion, "El pasillo no puede estar vacío");
+        mostrarError(Vista_Registrar_Almacen.lblValidarPasillo, "El pasillo no puede estar vacío");
     } else if (pasillo.length() < 2) {
-        mostrarError(Gestionar_Almacenn.lblPasilloValidacion, "Mínimo 2 caracteres");
+        mostrarError(Vista_Registrar_Almacen.lblValidarPasillo, "Mínimo 2 caracteres");
     } else if (tieneRepeticionesExtrañas(pasillo)) {
-        mostrarError(Gestionar_Almacenn.lblPasilloValidacion, "Evita repeticiones (ej: aaa, 111)");
+        mostrarError(Vista_Registrar_Almacen.lblValidarPasillo, "Evita repeticiones (ej: aaa, 111)");
     } else {
-        ocultarError(Gestionar_Almacenn.lblPasilloValidacion);
+        ocultarError(Vista_Registrar_Almacen.lblValidarPasillo);
     }
 }
 
    private void validarNivel() {
-    String nivel = Gestionar_Almacenn.txtNivel.getText().trim();
+    String nivel = Vista_Registrar_Almacen.txtNivel.getText().trim();
     if (nivel.isEmpty()) {
-        mostrarError(Gestionar_Almacenn.lblNivelValidacion, "El nivel no puede estar vacío");
+        mostrarError(Vista_Registrar_Almacen.LblValidarnivel, "El nivel no puede estar vacío");
     } else if (nivel.length() > 3) {
-        mostrarError(Gestionar_Almacenn.lblNivelValidacion, "Máximo 3 dígitos");
+        mostrarError(Vista_Registrar_Almacen.LblValidarnivel, "Máximo 3 dígitos");
     } else if (tieneRepeticionesExtrañas(nivel)) {
-        mostrarError(Gestionar_Almacenn.lblNivelValidacion, "Evita repeticiones (ej: 111)");
+        mostrarError(Vista_Registrar_Almacen.LblValidarnivel, "Evita repeticiones (ej: 111)");
     } else {
-        ocultarError(Gestionar_Almacenn.lblNivelValidacion);
+        ocultarError(Vista_Registrar_Almacen.LblValidarnivel);
     }
 }
    private void validarEstante() {
-    String estante = Gestionar_Almacenn.txtEstanteAlmacen.getText().trim();
+    String estante = Vista_Registrar_Almacen.txtEstante.getText().trim();
     if (estante.isEmpty()) {
-        mostrarError(Gestionar_Almacenn.lblEstanteValidacion, "El estante no puede estar vacío");
+        mostrarError(Vista_Registrar_Almacen.LblValidarestante, "El estante no puede estar vacío");
     } else if (estante.length() > 3) {
-        mostrarError(Gestionar_Almacenn.lblEstanteValidacion, "Máximo 3 dígitos");
+        mostrarError(Vista_Registrar_Almacen.LblValidarestante, "Máximo 3 dígitos");
     } else if (tieneRepeticionesExtrañas(estante)) {
-        mostrarError(Gestionar_Almacenn.lblEstanteValidacion, "Evita repeticiones (ej: 999)");
+        mostrarError(Vista_Registrar_Almacen.LblValidarestante, "Evita repeticiones (ej: 999)");
     } else {
-        ocultarError(Gestionar_Almacenn.lblEstanteValidacion);
+        ocultarError(Vista_Registrar_Almacen.LblValidarestante);
     }
 }
 
    private void validarCapacidad() {
-    String capacidad = Gestionar_Almacenn.txtCapacidadAlmacen.getText().trim();
+    String capacidad = Vista_Registrar_Almacen.txtCapacidad.getText().trim();
     if (capacidad.isEmpty()) {
-        mostrarError(Gestionar_Almacenn.lblCapacidadValidacion, "La capacidad no puede estar vacía");
+        mostrarError(Vista_Registrar_Almacen.LblValidarcapacidad, "La capacidad no puede estar vacía");
     } else {
         try {
             int cap = Integer.parseInt(capacidad);
             if (cap <= 0) {
-                mostrarError(Gestionar_Almacenn.lblCapacidadValidacion, "Debe ser mayor a 0");
-            } else if (cap > 10000) {
-                mostrarError(Gestionar_Almacenn.lblCapacidadValidacion, "Máximo 10000");
+                mostrarError(Vista_Registrar_Almacen.LblValidarcapacidad, "Debe ser mayor a 0");
+            } else if (cap > 99) {
+                mostrarError(Vista_Registrar_Almacen.LblValidarcapacidad, "Máximo 99");
             } else if (tieneRepeticionesExtrañas(capacidad)) {
-                mostrarError(Gestionar_Almacenn.lblCapacidadValidacion, "Evita repeticiones (ej: 1111)");
+                mostrarError(Vista_Registrar_Almacen.LblValidarcapacidad, "Evita repeticiones (ej: 1111)");
             } else {
-                ocultarError(Gestionar_Almacenn.lblCapacidadValidacion);
+                ocultarError(Vista_Registrar_Almacen.LblValidarcapacidad);
             }
         } catch (NumberFormatException e) {
-            mostrarError(Gestionar_Almacenn.lblCapacidadValidacion, "Número inválido");
+            mostrarError(Vista_Registrar_Almacen.LblValidarcapacidad, "Número inválido");
         }
     }
 }
    private void validarAla() {
-    Object alaSel = Gestionar_Almacenn.ComboxAla.getSelectedItem();
+    Object alaSel = Vista_Registrar_Almacen.jComboBoxAla.getSelectedItem();
     String ala = (alaSel != null) ? alaSel.toString().trim() : "";
     if (ala.isEmpty() || ala.equalsIgnoreCase("Seleccione")) {
-        mostrarError(Gestionar_Almacenn.lblAlaValidacion, "Debe seleccionar un ala");
+        mostrarError(Vista_Registrar_Almacen.LblValidarAla, "Debe seleccionar un ala");
     } else {
-        ocultarError(Gestionar_Almacenn.lblAlaValidacion);
+        ocultarError(Vista_Registrar_Almacen.LblValidarAla);
     }
 }
    private boolean tieneRepeticionesExtrañas(String texto) {
@@ -165,11 +165,11 @@ public class Validar_Almacen extends AlmacenDao {
 }
    
    private void ocultarTodosErroresAlmacen() {
-    ocultarError(Gestionar_Almacenn.lblPasilloValidacion);
-    ocultarError(Gestionar_Almacenn.lblNivelValidacion);
-    ocultarError(Gestionar_Almacenn.lblEstanteValidacion);
-    ocultarError(Gestionar_Almacenn.lblCapacidadValidacion);
-    ocultarError(Gestionar_Almacenn.lblAlaValidacion);
+    ocultarError(Vista_Registrar_Almacen.lblValidarPasillo);
+    ocultarError(Vista_Registrar_Almacen.LblValidarnivel);
+    ocultarError(Vista_Registrar_Almacen.LblValidarestante);
+    ocultarError(Vista_Registrar_Almacen.LblValidarcapacidad);
+    ocultarError(Vista_Registrar_Almacen.LblValidarAla);
 }
    
    @FunctionalInterface
@@ -190,26 +190,30 @@ static class SimpleDocumentListener implements DocumentListener {
         validarCapacidad();
         validarAla();
 
-        return !Gestionar_Almacenn.lblPasilloValidacion.isVisible()
-                && !Gestionar_Almacenn.lblNivelValidacion.isVisible()
-                && !Gestionar_Almacenn.lblEstanteValidacion.isVisible()
-                && !Gestionar_Almacenn.lblCapacidadValidacion.isVisible()
-                && !Gestionar_Almacenn.lblAlaValidacion.isVisible();
+        return !Vista_Registrar_Almacen.lblValidarPasillo.isVisible()
+                && !Vista_Registrar_Almacen.LblValidarnivel.isVisible()
+                && !Vista_Registrar_Almacen.LblValidarestante.isVisible()
+                && !Vista_Registrar_Almacen.LblValidarcapacidad.isVisible()
+                && !Vista_Registrar_Almacen.LblValidarAla.isVisible();
     }
 
     // ------------------- REGISTRAR -------------------
     public void registrarAlmacenValidado() throws ClassNotFoundException, SQLException {
         if (!validarFormularioAlmacen()) {
-            JOptionPane.showMessageDialog(null, "Corrige los campos marcados antes de registrar el almacén.");
+          JOptionPane.showMessageDialog(null, "Corrige los campos marcados antes de registrar el almacén.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
+                    
+                    
+                 
+          
         }
 
         Almacen a = new Almacen();
-        a.setPasillo(Gestionar_Almacenn.txtPasillolmacen.getText().trim());
-        a.setNivel(Integer.parseInt(Gestionar_Almacenn.txtNivel.getText().trim()));
-        a.setEstante(Gestionar_Almacenn.txtEstanteAlmacen.getText().trim());
-        a.setCapacidad(Integer.parseInt(Gestionar_Almacenn.txtCapacidadAlmacen.getText().trim()));
-        a.setAla(Gestionar_Almacenn.ComboxAla.getSelectedItem().toString().trim());
+        a.setPasillo(Vista_Registrar_Almacen.txtPasillo.getText().trim());
+        a.setNivel(Integer.parseInt(Vista_Registrar_Almacen.txtNivel.getText().trim()));
+        a.setEstante(Vista_Registrar_Almacen.txtEstante.getText().trim());
+        a.setCapacidad(Integer.parseInt(Vista_Registrar_Almacen.txtCapacidad.getText().trim()));
+        a.setAla(Vista_Registrar_Almacen.jComboBoxAla.getSelectedItem().toString().trim());
 
         dao.RegistrarAlmacen();
       
@@ -218,19 +222,19 @@ static class SimpleDocumentListener implements DocumentListener {
     // ------------------- ACTUALIZAR -------------------
     public void actualizarAlmacenValidado() throws ClassNotFoundException, SQLException {
         if (!validarFormularioAlmacen()) {
-            JOptionPane.showMessageDialog(null, "Corrige los campos marcados antes de actualizar el almacén.");
+            JOptionPane.showMessageDialog(null, "Corrige los campos marcados antes de ACTUALIZAR el almacén.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         Almacen a = new Almacen();
-        a.setId_Ubicacion(Integer.parseInt(Gestionar_Almacenn.txtIDAlmacen.getText().trim()));
-        a.setPasillo(Gestionar_Almacenn.txtPasillolmacen.getText().trim());
-        a.setNivel(Integer.parseInt(Gestionar_Almacenn.txtNivel.getText().trim()));
-        a.setEstante(Gestionar_Almacenn.txtEstanteAlmacen.getText().trim());
-        a.setCapacidad(Integer.parseInt(Gestionar_Almacenn.txtCapacidadAlmacen.getText().trim()));
-        a.setAla(Gestionar_Almacenn.ComboxAla.getSelectedItem().toString().trim());
+    //    a.setId_Ubicacion(Integer.parseInt(Vista_Registrar_Almacen.txtIDAlmacen.getText().trim()));
+        a.setPasillo(Vista_Registrar_Almacen.txtPasillo.getText().trim());
+        a.setNivel(Integer.parseInt(Vista_Registrar_Almacen.txtNivel.getText().trim()));
+        a.setEstante(Vista_Registrar_Almacen.txtEstante.getText().trim());
+        a.setCapacidad(Integer.parseInt(Vista_Registrar_Almacen.txtCapacidad.getText().trim()));
+        a.setAla(Vista_Registrar_Almacen.jComboBoxAla.getSelectedItem().toString().trim());
 
-        dao.ActualizarAlmacen();
+        dao.ActualizarConseguridad();
        
     }
 

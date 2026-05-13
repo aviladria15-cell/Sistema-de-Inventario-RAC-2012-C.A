@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import vista_Libro_Contable.Frm_Cuenta;
 
-import Vista_Almacen.Gestionar_Almacenn;
+
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
@@ -451,28 +451,7 @@ public class CuentaDao extends ConexiónBD {
     
     
 
-    public void cargarComboSalidaYAjuste() throws ClassNotFoundException, SQLException {
-        cargarComboCuentasCaja(Gestionar_Almacenn.jComboBoxCuentas);
-    }
-    
-    
-    
-    public  void  CargarCuentaIngreso () throws ClassNotFoundException,SQLException{
-        
-        
-        cargarComboCuentascVentas(Gestionar_Almacenn.jComboBoxCuentasIngreso);
-    
-    }
-    
-    
-    
-    public  void CargarCuentaInventario () throws  ClassNotFoundException,SQLException {
-        
-        cargarComboCuentascInventario(Gestionar_Almacenn.jComboBoxCuentasInventario);
-        
-        
-    }
-    
+
     
     
 }

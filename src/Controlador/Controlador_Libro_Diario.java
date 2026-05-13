@@ -1,5 +1,7 @@
 package Controlador;
 
+import Modelo.Asiento_contable;
+import ModeloDAO.AsientosDao;
 import ModeloDAO.LibroDiarioDao;
 import Vista_Usuari_Empleado.Menu_Sistema;
 import java.awt.event.ActionEvent;
@@ -31,16 +33,16 @@ public class Controlador_Libro_Diario implements ActionListener {
      */
     public void mostrarVista() {
         if (vistaLibroDiario == null) {
-            try {
+          
                 vistaLibroDiario = new frm_libroDiario();
                 agregarListeners();
-            } catch (ClassNotFoundException | SQLException ex) {
-                Logger.getLogger(Controlador_Libro_Diario.class.getName())
-                      .log(Level.SEVERE, "Error al crear frm_libroDiario", ex);
-            }
+                CargarCuentas();
+           
         }
 
         vistaLibroDiario.setVisible(true);
+        
+       CargarCuentas();
         menu.setVisible(false);
     }
 
@@ -62,10 +64,36 @@ public class Controlador_Libro_Diario implements ActionListener {
         else if (e.getSource() == vistaLibroDiario.btbVerAsientoContable) {
             mostrarAsientoContable();
         }
+        
+        else if (e.getSource() == vistaAsientoContable.btbAtras){
+            
+           MenoAsiento();
+            
+        }
+        
+        
+        else if (e.getSource() == vistaAsientoContable.btbFiltrarAsientos) {
+            
+            FiltarAsientos();
+            
+        }
     }
 
     // ====================== MÉTODOS PRIVADOS ======================
 
+    private  void CargarCuentas (){
+        ModeloDAO.LibroDiarioDao libroDiarioDao = new LibroDiarioDao();
+        
+        try {
+            libroDiarioDao.MostrarListaLibroContable();
+        } catch (ClassNotFoundException ex) {
+            System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (SQLException ex) {
+            System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    
     private void volverAlMenu() {
         vistaLibroDiario.setVisible(false);
         menu.setVisible(true);
@@ -90,17 +118,59 @@ public class Controlador_Libro_Diario implements ActionListener {
      */
     private void mostrarAsientoContable() {
         if (vistaAsientoContable == null) {
-            try {
+            
                 vistaAsientoContable = new frm_AsientoContable();
                 // Aquí puedes agregar listeners si el AsientoContable también tiene botones controlados
-            } catch (ClassNotFoundException ex) {
-                System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            } catch (SQLException ex) {
-                System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            }
+           AgregarListenrs();
         }
 
         vistaAsientoContable.setVisible(true);
+        CargarAsuientosContables();
+        
         vistaLibroDiario.setVisible(false);
     }
+    
+    
+    
+    
+    private  void FiltarAsientos (){
+        ModeloDAO.AsientosDao asientosDao = new AsientosDao();
+        
+        try {
+            asientosDao.FiltrarAsientoContablePorFecha(vistaAsientoContable.TablaAsiento, vistaAsientoContable.jDateDesde, vistaAsientoContable.jDateHasta);
+        } catch (SQLException ex) {
+            System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    private  void MenoAsiento (){
+        vistaLibroDiario.setVisible(true);
+        vistaAsientoContable.setVisible(false);
+    }
+    
+    
+    private  void AgregarListenrs (){
+        
+        vistaAsientoContable.btbAtras.addActionListener(this);
+        vistaAsientoContable.btbFiltrarAsientos.addActionListener(this);
+ 
+    }
+    
+    
+    
+    
+    private  void CargarAsuientosContables (){
+        ModeloDAO.AsientosDao asientosDao = new AsientosDao();
+        
+        try {
+            asientosDao.MostrarAsientosContables();
+        } catch (ClassNotFoundException ex) {
+            System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (SQLException ex) {
+            System.getLogger(Controlador_Libro_Diario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    
+    
 }

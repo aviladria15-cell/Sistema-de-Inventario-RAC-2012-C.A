@@ -7,11 +7,11 @@ import javax.swing.table.DefaultTableModel;
 import Vista_GestionInventario.InventarioUnidad;
 import java.sql.*;
 import java.util.*;
-
+import Vista_Almacen.Ajuste_Unidad;
 import Modelo.*;
-import Vista_Almacen.Gestionar_Almacenn;
 
-
+import Vista_Almacen.Ajuste_Liquido;
+import Vista_Almacen.Ajuste_Solido;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
@@ -836,12 +836,12 @@ int idProduct = productoSeleccionado0.getIdinventario();
     
     public void Realizar_AJUSTE_Solido() throws ClassNotFoundException, SQLException {
 
-    mv.setTipoProducto(Gestionar_Almacenn.txtTIPOLIQUIDO.getText());
+    mv.setTipoProducto(Ajuste_Solido.txtTipoProductoSolido.getText());
 
-    mv.setTipoMovimiento(Gestionar_Almacenn.txtAjuste.getText());
+    mv.setTipoMovimiento(Ajuste_Solido.txtAccionAjuste.getText());
 
     // ⚡ Leer cantidad con signos (+40, -70) y sin espacios
-    String cantidadStr = Gestionar_Almacenn.txtCantidadAjusteSolido.getText().trim().replace(" ", "");
+    String cantidadStr = Ajuste_Solido.txtCantidad.getText().trim().replace(" ", "");
 
     try {
         int cantidadAjuste = Integer.parseInt(cantidadStr); // acepta +40, -70, 40
@@ -851,16 +851,16 @@ int idProduct = productoSeleccionado0.getIdinventario();
         return; // salir si no es válido
     }
 
-    mv.setDetalle(Gestionar_Almacenn.txtDatelleAjsuteSolido.getText());
+    mv.setDetalle(Ajuste_Solido.txtDetalleUnidad.getText());
 
     // Obtener idProducto
-    Inventario productoSeleccionado = (Inventario) Gestionar_Almacenn.JComboxSOLIDO.getSelectedItem();
+    Inventario productoSeleccionado = (Inventario) Ajuste_Solido.jComboBoxProducto.getSelectedItem();
     int idProducto = productoSeleccionado.getIdProducto();
 
     // Obtener idInventario
     int idInventario = productoSeleccionado.getIdinventario();
     
-    cuenta SeleccionCuenta = (cuenta) Gestionar_Almacenn.jComboBoxCuentasInventario.getSelectedItem();
+    cuenta SeleccionCuenta = (cuenta) Ajuste_Solido.jComboBoxCuentaPasivo.getSelectedItem();
   int idCuenta = SeleccionCuenta.getIdCuenta();
     String sql = "INSERT INTO movimiento (idProducto, id_inventario, Tipo_Producto, Movimiento, Cantidad, Usuario, Detalle,id_cuenta) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -880,11 +880,9 @@ int idProduct = productoSeleccionado0.getIdinventario();
         if (ps.executeUpdate() > 0) {
             
             JOptionPane.showMessageDialog(null, "Movimiento realizado con exito");
-      //      iv.CargarComboxBoxSOLIDO();
-
-            // Limpiar campos
-            Gestionar_Almacenn.txtCantidadAjusteSolido.setText("");
-            Gestionar_Almacenn.txtDatelleAjsuteSolido.setText("");
+   
+           Ajuste_Solido.txtCantidad.setText("");
+          Ajuste_Solido.txtDetalleUnidad.setText("");
 
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo realizar el movimiento");
@@ -895,17 +893,61 @@ int idProduct = productoSeleccionado0.getIdinventario();
     }
 }
 
+         
+ public void RealizarAjusteSolido() {
     
+     int prododucto = Ajuste_Solido.jComboBoxProducto.getSelectedIndex();
+     
+    if (prododucto == -1) {
+        JOptionPane.showMessageDialog(null,
+            "Debe seleccionar un producto para realizar el ajuste.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    } 
+    
+    // Mensaje de confirmación
+  String mensaje = "<html><b>¿Estás seguro de realizar este ajuste Solido?</b><br><br>" +
+                 "Este movimiento:<br><br>" +
+                 "• Afectará el Stock del producto<br>" +
+                 "• Afectará la cuenta de Ajuste de Inventario<br><br>" +
+                 "• Cantidad: " + Ajuste_Solido.txtCantidad.getText() + "<br>" +
+                 "• Detalle: " + Ajuste_Solido.txtDetalleUnidad.getText() + "</html>";
+   
+    int respuesta = JOptionPane.showConfirmDialog(null,
+        mensaje,
+        "Confirmar Ajuste Solido",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+   
+    if (respuesta == JOptionPane.YES_OPTION) {
+        
+        try {
+            Realizar_AJUSTE_Solido();   // No se toca este método
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null,
+                "Error al realizar el ajuste:\n" + ex.getMessage(),
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            
+            // Opcional: registrar en consola
+            ex.printStackTrace();
+        }
+    } 
+    // else: el usuario canceló → no se hace nada
+}
+  
     
          
     public void Realizar_AJUSTE_Unidad() throws ClassNotFoundException, SQLException {
 
-    mv.setTipoProducto(Gestionar_Almacenn.txtTIPOUNIDAD.getText());
+    mv.setTipoProducto(Ajuste_Unidad.txtTipoProductuUnidad.getText());
 
-    mv.setTipoMovimiento(Gestionar_Almacenn.txtAjuste.getText());
+    mv.setTipoMovimiento(Ajuste_Unidad.txtAccionAjuste.getText());
 
     // ⚡ Leer cantidad con signos (+40, -70) y sin espacios
-    String cantidadStr = Gestionar_Almacenn.txtCantidadAjusteUNIDAD.getText().trim().replace(" ", "");
+    String cantidadStr = Ajuste_Unidad.txtCantidad.getText().trim().replace(" ", "");
 
     try {
         int cantidadAjuste = Integer.parseInt(cantidadStr); // acepta +40, -70, 40
@@ -915,16 +957,16 @@ int idProduct = productoSeleccionado0.getIdinventario();
         return; // salir si no es válido
     }
 
-    mv.setDetalle(Gestionar_Almacenn.txtDatelleAjsuteUNIDAD.getText());
+    mv.setDetalle(Ajuste_Unidad.txtDetalle.getText());
 
     // Obtener idProducto
-    Inventario productoSeleccionado = (Inventario) Gestionar_Almacenn.JComboxSUnidad.getSelectedItem();
+    Inventario productoSeleccionado = (Inventario) Ajuste_Unidad.jComboBoxProductoUnidad.getSelectedItem();
     int idProducto = productoSeleccionado.getIdProducto();
 
     // Obtener idInventario
     int idInventario = productoSeleccionado.getIdinventario();
 
-    cuenta SaleccionCuenta = (cuenta) Gestionar_Almacenn.jComboBoxCuentasInventario.getSelectedItem();
+    cuenta SaleccionCuenta = (cuenta) Ajuste_Unidad.jComboBoxCuentas.getSelectedItem();
     int idCuenta = SaleccionCuenta.getIdCuenta();
     String sql = "INSERT INTO movimiento (idProducto, id_inventario, Tipo_Producto, Movimiento, Cantidad, Usuario, Detalle,id_cuenta) VALUES (?,?,?,?,?,?,?,?)";
 
@@ -943,11 +985,11 @@ int idProduct = productoSeleccionado0.getIdinventario();
 
         if (ps.executeUpdate() > 0) {
             JOptionPane.showMessageDialog(null, "Movimiento realizado");
-            iv.CargarComboxBoxUnidad();
+         
 
             // Limpiar campos
-            Gestionar_Almacenn.txtCantidadAjusteUNIDAD.setText("");
-            Gestionar_Almacenn.txtDatelleAjsuteUNIDAD.setText("");
+           Ajuste_Unidad.txtCantidad.setText("");
+            Ajuste_Unidad.txtDetalle.setText("");
 
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo realizar el movimiento");
@@ -957,16 +999,60 @@ int idProduct = productoSeleccionado0.getIdinventario();
         JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
     }
 }
+       
+ public void RealizarAjusteUnidad() {
     
+     int prododucto = Ajuste_Unidad.jComboBoxProductoUnidad.getSelectedIndex();
+     
+    if (prododucto == -1) {
+        JOptionPane.showMessageDialog(null,
+            "Debe seleccionar un producto para realizar el ajuste.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    } 
+    
+    // Mensaje de confirmación
+  String mensaje = "<html><b>¿Estás seguro de realizar este ajuste Unidad?</b><br><br>" +
+                 "Este movimiento:<br><br>" +
+                 "• Afectará el Stock del producto<br>" +
+                 "• Afectará la cuenta de Ajuste de Inventario<br><br>" +
+                 "• Cantidad: " + Ajuste_Unidad.txtCantidad.getText() + "<br>" +
+                 "• Detalle: " + Ajuste_Unidad.txtDetalle.getText() + "</html>";
+   
+    int respuesta = JOptionPane.showConfirmDialog(null,
+        mensaje,
+        "Confirmar Ajuste Unidad",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+   
+    if (respuesta == JOptionPane.YES_OPTION) {
+        
+        try {
+            Realizar_AJUSTE_Unidad();   // No se toca este método
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null,
+                "Error al realizar el ajuste:\n" + ex.getMessage(),
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            
+            // Opcional: registrar en consola
+            ex.printStackTrace();
+        }
+    } 
+    // else: el usuario canceló → no se hace nada
+}
+   
     
      public void Realizar_AJUSTE_Liquido() throws ClassNotFoundException, SQLException {
 
-    mv.setTipoProducto(Gestionar_Almacenn.txtTIPOLIQUIDOOOOOO.getText());
+    mv.setTipoProducto(Ajuste_Liquido.txtTipoProducto.getText());
 
-    mv.setTipoMovimiento(Gestionar_Almacenn.txtAjuste.getText());
+    mv.setTipoMovimiento(Ajuste_Liquido.txtAccionAjuste.getText());
 
     // ⚡ Leer cantidad con signos (+40, -70) y sin espacios
-    String cantidadStr = Gestionar_Almacenn.txtCantidadAjusteLIQUIDO.getText().trim().replace(" ", "");
+    String cantidadStr = Ajuste_Liquido.txtCantidad.getText().trim().replace(" ", "");
 
     try {
         int cantidadAjuste = Integer.parseInt(cantidadStr); // acepta +40, -70, 40
@@ -976,16 +1062,16 @@ int idProduct = productoSeleccionado0.getIdinventario();
         return; // salir si no es válido
     }
 
-    mv.setDetalle(Gestionar_Almacenn.txtDatelleAjsuteLIQUIDO.getText());
+    mv.setDetalle(Ajuste_Liquido.txtDetalle.getText());
 
     // Obtener idProducto
-    Inventario productoSeleccionado = (Inventario) Gestionar_Almacenn.JComboxLiquido.getSelectedItem();
+    Inventario productoSeleccionado = (Inventario) Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.getSelectedItem();
     int idProducto = productoSeleccionado.getIdProducto();
 
     // Obtener idInventario
     int idInventario = productoSeleccionado.getIdinventario();
     
-    cuenta SeleccionCuenta = (cuenta)Gestionar_Almacenn.jComboBoxCuentasInventario.getSelectedItem();
+    cuenta SeleccionCuenta = (cuenta) Ajuste_Liquido.jComboBoxCuentaInventario.getSelectedItem();
     int idCuenta = SeleccionCuenta.getIdCuenta();
 
     String sql = "INSERT INTO movimiento (idProducto, id_inventario, Tipo_Producto, Movimiento, Cantidad, Usuario, Detalle,id_cuenta) VALUES (?,?,?,?,?,?,?,?)";
@@ -1005,11 +1091,9 @@ int idProduct = productoSeleccionado0.getIdinventario();
 
         if (ps.executeUpdate() > 0) {
             JOptionPane.showMessageDialog(null, "Movimiento realizado");
-       //     iv.CargarComboxBoxLiquido();
-
-            // Limpiar campos
-            Gestionar_Almacenn.txtCantidadAjusteLIQUIDO.setText("");
-            Gestionar_Almacenn.txtDatelleAjsuteLIQUIDO.setText("");
+       //   
+            Ajuste_Liquido.txtCantidad.setText("");
+           Ajuste_Liquido.txtDetalle.setText("");
 
         } else {
             JOptionPane.showMessageDialog(null, "No se pudo realizar el movimiento");
@@ -1023,8 +1107,50 @@ int idProduct = productoSeleccionado0.getIdinventario();
      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
      
-   
+  
      
- 
+ public void RealizarAjusteLiquido() {
+    
+     int prododucto = Ajuste_Liquido.jComboBoxProductoLiquidoAjuste.getSelectedIndex();
+     
+    if (prododucto == -1) {
+        JOptionPane.showMessageDialog(null,
+            "Debe seleccionar un producto para realizar el ajuste.",
+            "Error",
+            JOptionPane.ERROR_MESSAGE);
+        return;
+    } 
+    
+    // Mensaje de confirmación
+  String mensaje = "<html><b>¿Estás seguro de realizar este ajuste líquido?</b><br><br>" +
+                 "Este movimiento:<br><br>" +
+                 "• Afectará el Stock del producto<br>" +
+                 "• Afectará la cuenta de Ajuste de Inventario<br><br>" +
+                 "• Cantidad: " + Ajuste_Liquido.txtCantidad.getText() + "<br>" +
+                 "• Detalle: " + Ajuste_Liquido.txtDetalle.getText() + "</html>";
+   
+    int respuesta = JOptionPane.showConfirmDialog(null,
+        mensaje,
+        "Confirmar Ajuste Líquido",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE);
+   
+    if (respuesta == JOptionPane.YES_OPTION) {
+        
+        try {
+            Realizar_AJUSTE_Liquido();   // No se toca este método
+        } 
+        catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(null,
+                "Error al realizar el ajuste:\n" + ex.getMessage(),
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+            
+            // Opcional: registrar en consola
+            ex.printStackTrace();
+        }
+    } 
+    // else: el usuario canceló → no se hace nada
+}
    
 }
